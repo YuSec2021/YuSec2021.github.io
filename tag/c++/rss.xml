@@ -8,6 +8,7 @@
         <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
         <lastBuildDate>Thu, 17 Feb 2022 18:00:09 +0800</lastBuildDate>
         <category>C++</category>
+        <category>Reverse</category>
         <item>
             <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/%E8%99%9A%E5%87%BD%E6%95%B0%E4%BB%A5%E5%8F%8A%E8%99%9A%E8%A1%A8%E5%9C%A8IDA%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0/</guid>
             <title>虚函数以及虚表在IDA中的体现</title>
