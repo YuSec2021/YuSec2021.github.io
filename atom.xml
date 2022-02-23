@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://YuSec2021.github.io</id>
     <title>YuSec2021</title>
-    <subtitle>YuSec2021</subtitle>
+    <subtitle>YuSec Test RePWNCrypto</subtitle>
     <icon>https://yusec2021.github.io/images/favicon.ico</icon>
     <link href="https://YuSec2021.github.io" />
     <author>
