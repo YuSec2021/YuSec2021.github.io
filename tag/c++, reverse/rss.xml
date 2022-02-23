@@ -1,15 +1,20 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://YuSec2021.github.io</id>
-    <title>YuSec2021</title>
-    <link href="https://YuSec2021.github.io" />
-    <updated>2022-02-17T10:00:09.000Z</updated>
-    <category term="C++, Reverse" />
-    <entry>
-        <id>https://yusec2021.github.io/2022/02/17/VirtualFunction/</id>
-        <title>虚函数以及虚表在IDA中的体现</title>
-        <link rel="alternate" href="https://yusec2021.github.io/2022/02/17/VirtualFunction/"/>
-        <content type="html">&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针&#34;&gt;&lt;a href=&#34;#this指针&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
+<rss version="2.0">
+    <channel>
+        <title>YuSec2021 • Posts by &#34;c++, reverse&#34; tag</title>
+        <link>https://YuSec2021.github.io</link>
+        <description>Record My Learning</description>
+        <language>en</language>
+        <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
+        <lastBuildDate>Thu, 17 Feb 2022 18:00:09 +0800</lastBuildDate>
+        <category>C++, Reverse</category>
+        <item>
+            <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/VirtualFunction/</guid>
+            <title>虚函数以及虚表在IDA中的体现</title>
+            <link>https://yusec2021.github.io/2022/02/17/VirtualFunction/</link>
+            <category>C++, Reverse</category>
+            <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
+            <description><![CDATA[ &lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针&#34;&gt;&lt;a href=&#34;#this指针&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
 &lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1774,8 +1779,7 @@ int main() &amp;#123;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;End-8&#34;&gt;&lt;a href=&#34;#End-8&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;</content>
-        <category term="C++, Reverse" />
-        <updated>2022-02-17T10:00:09.000Z</updated>
-    </entry>
-</feed>
+&lt;h3 id=&#34;End-8&#34;&gt;&lt;a href=&#34;#End-8&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt; ]]></description>
+        </item>
+    </channel>
+</rss>
