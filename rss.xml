@@ -7,8 +7,8 @@
         <language>en</language>
         <pubDate>Mon, 21 Feb 2022 16:09:09 +0800</pubDate>
         <lastBuildDate>Mon, 21 Feb 2022 16:09:09 +0800</lastBuildDate>
-        <category>C++</category>
         <category>Reverse</category>
+        <category>C++</category>
         <item>
             <guid isPermalink="true">https://yusec2021.github.io/2022/02/21/Splendid_MineCraft/</guid>
             <title>ACTF新生赛2020 Splendid_MineCraft</title>
@@ -2547,16 +2547,6 @@
  ]]></description>
         </item>
         <item>
-            <guid isPermalink="true">https://yusec2021.github.io/2022/02/18/Ceshi/</guid>
-            <title>测试</title>
-            <link>https://yusec2021.github.io/2022/02/18/Ceshi/</link>
-            <pubDate>Fri, 18 Feb 2022 14:48:09 +0800</pubDate>
-            <description><![CDATA[ &lt;h2 id=&#34;ceshi&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#ceshi&#34;&gt;#&lt;/a&gt; Ceshi&lt;/h2&gt;
-&lt;h2 id=&#34;ceshi-2&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#ceshi-2&#34;&gt;#&lt;/a&gt; Ceshi&lt;/h2&gt;
-&lt;p&gt;&lt;img data-src=&#34;image-20220218144804118.png&#34; alt=&#34;image-20220218144804118&#34; /&gt;&lt;/p&gt;
- ]]></description>
-        </item>
-        <item>
             <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/VirtualFunction/</guid>
             <title>虚函数以及虚表在IDA中的体现</title>
             <link>https://yusec2021.github.io/2022/02/17/VirtualFunction/</link>
@@ -2924,13 +2914,6 @@
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;p&gt;&lt;figure class=&#34;highlight c&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;BOOL __thiscall &lt;span class=&#34;title function_&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;params&#34;&gt;(_DWORD *this, &lt;span class=&#34;type&#34;&gt;int&lt;/span&gt; flag)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  BOOL result; &lt;span class=&#34;comment&#34;&gt;// eax&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  this[&lt;span class=&#34;number&#34;&gt;2&lt;/span&gt;] = flag;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  result = &lt;span class=&#34;number&#34;&gt;0&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  &lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; ( sub_402500() )&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    sub_4026E0();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; ( sub_402A00() )&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;      result = &lt;span class=&#34;number&#34;&gt;1&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  &lt;span class=&#34;keyword&#34;&gt;return&lt;/span&gt; result;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
  ]]></description>
-        </item>
-        <item>
-            <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/test1/</guid>
-            <title>test1</title>
-            <link>https://yusec2021.github.io/2022/02/17/test1/</link>
-            <pubDate>Thu, 17 Feb 2022 15:12:16 +0800</pubDate>
-            <description><![CDATA[  ]]></description>
         </item>
         <item>
             <guid isPermalink="true">https://yusec2021.github.io/2022/02/16/hello-world/</guid>

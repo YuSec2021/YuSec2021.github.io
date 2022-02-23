@@ -15,14 +15,6 @@
             ]
         },
         {
-            "id": "https://yusec2021.github.io/2022/02/18/Ceshi/",
-            "url": "https://yusec2021.github.io/2022/02/18/Ceshi/",
-            "title": "测试",
-            "date_published": "2022-02-18T06:48:09.000Z",
-            "content_html": "<h2 id=\"ceshi\"><a class=\"anchor\" href=\"#ceshi\">#</a> Ceshi</h2>\n<h2 id=\"ceshi-2\"><a class=\"anchor\" href=\"#ceshi-2\">#</a> Ceshi</h2>\n<p><img data-src=\"image-20220218144804118.png\" alt=\"image-20220218144804118\" /></p>\n",
-            "tags": []
-        },
-        {
             "id": "https://yusec2021.github.io/2022/02/17/VirtualFunction/",
             "url": "https://yusec2021.github.io/2022/02/17/VirtualFunction/",
             "title": "虚函数以及虚表在IDA中的体现",
@@ -31,14 +23,6 @@
             "tags": [
                 "C++"
             ]
-        },
-        {
-            "id": "https://yusec2021.github.io/2022/02/17/test1/",
-            "url": "https://yusec2021.github.io/2022/02/17/test1/",
-            "title": "test1",
-            "date_published": "2022-02-17T07:12:16.000Z",
-            "content_html": "",
-            "tags": []
         },
         {
             "id": "https://yusec2021.github.io/2022/02/16/hello-world/",
