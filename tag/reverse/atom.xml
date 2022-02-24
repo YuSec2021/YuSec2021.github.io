@@ -1,22 +1,16 @@
 <?xml version="1.0"?>
-<rss version="2.0">
-    <channel>
-        <title>YuSec2021</title>
-        <link>https://YuSec2021.github.io</link>
-        <description>Record My Learning</description>
-        <language>en</language>
-        <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
-        <lastBuildDate>Thu, 17 Feb 2022 18:00:09 +0800</lastBuildDate>
-        <category>Reverse</category>
-        <category>C++</category>
-        <item>
-            <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/VirtualFunction/</guid>
-            <title>虚函数及虚表逆向浅析</title>
-            <link>https://yusec2021.github.io/2022/02/17/VirtualFunction/</link>
-            <category>Reverse</category>
-            <category>C++</category>
-            <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
-            <description><![CDATA[ &lt;h2 id=&#34;reverse中虚函数虚表浅析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://YuSec2021.github.io</id>
+    <title>YuSec2021 • Posts by &#34;reverse&#34; tag</title>
+    <link href="https://YuSec2021.github.io" />
+    <updated>2022-02-17T10:00:09.000Z</updated>
+    <category term="Reverse" />
+    <category term="C++" />
+    <entry>
+        <id>https://yusec2021.github.io/2022/02/17/VirtualFunction/</id>
+        <title>虚函数及虚表逆向浅析</title>
+        <link rel="alternate" href="https://yusec2021.github.io/2022/02/17/VirtualFunction/"/>
+        <content type="html">&lt;h2 id=&#34;reverse中虚函数虚表浅析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
 &lt;h3 id=&#34;this指针&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
 &lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
 &lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
@@ -386,7 +380,9 @@
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;p&gt;&amp;lt;!–code￼89–&amp;gt;&lt;/p&gt;
 &lt;h3 id=&#34;end-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-9&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
- ]]></description>
-        </item>
-    </channel>
-</rss>
+</content>
+        <category term="Reverse" />
+        <category term="C++" />
+        <updated>2022-02-17T10:00:09.000Z</updated>
+    </entry>
+</feed>
