@@ -9,8 +9,10 @@
         <id>https://yusec2021.github.io/2022/02/17/VirtualFunction/</id>
         <title>虚函数以及虚表在IDA中的体现</title>
         <link rel="alternate" href="https://yusec2021.github.io/2022/02/17/VirtualFunction/"/>
-        <content type="html">&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针&#34;&gt;&lt;a href=&#34;#this指针&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+        <content type="html">&lt;h2 id=&#34;reverse中虚函数虚表浅析&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -21,10 +23,11 @@
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-1&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-1&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-1&#34;&gt;&lt;a href=&#34;#this指针-1&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-2&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-2&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-2&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-2&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -35,10 +38,9 @@
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -74,15 +76,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序&#34;&gt;&lt;a href=&#34;#IDA加载该程序&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -103,23 +105,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题&#34;&gt;&lt;a href=&#34;#一道逆向题&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -145,8 +145,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -180,10 +179,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -198,12 +196,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -219,10 +215,12 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End&#34;&gt;&lt;a href=&#34;#End&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-2&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-2&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-2&#34;&gt;&lt;a href=&#34;#this指针-2&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;h3 id=&#34;end&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-3&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-3&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-3&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-3&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -233,10 +231,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -272,15 +269,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-1&#34;&gt;&lt;a href=&#34;#IDA加载该程序-1&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-2&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-2&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -301,23 +298,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-1&#34;&gt;&lt;a href=&#34;#一道逆向题-1&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-2&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-2&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -343,8 +338,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -378,10 +372,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -396,12 +389,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -417,8 +408,8 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-1&#34;&gt;&lt;a href=&#34;#End-1&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;demo2：&lt;/p&gt;
+&lt;h3 id=&#34;end-2&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-2&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
 using namespace std;
 
@@ -452,10 +443,11 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-3&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-3&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-3&#34;&gt;&lt;a href=&#34;#this指针-3&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-4&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-4&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-4&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-4&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -466,10 +458,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -505,15 +496,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-2&#34;&gt;&lt;a href=&#34;#IDA加载该程序-2&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-3&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-3&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -534,23 +525,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-2&#34;&gt;&lt;a href=&#34;#一道逆向题-2&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-3&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-3&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -576,8 +565,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -611,10 +599,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -629,12 +616,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -650,10 +635,12 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-2&#34;&gt;&lt;a href=&#34;#End-2&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-4&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-4&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-4&#34;&gt;&lt;a href=&#34;#this指针-4&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;h3 id=&#34;end-3&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-3&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-5&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-5&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-5&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-5&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -664,10 +651,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -703,15 +689,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-3&#34;&gt;&lt;a href=&#34;#IDA加载该程序-3&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-4&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-4&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -732,23 +718,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-3&#34;&gt;&lt;a href=&#34;#一道逆向题-3&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-4&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-4&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -774,8 +758,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -809,10 +792,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -827,12 +809,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -848,10 +828,12 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-3&#34;&gt;&lt;a href=&#34;#End-3&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-5&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-5&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-5&#34;&gt;&lt;a href=&#34;#this指针-5&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;h3 id=&#34;end-4&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-4&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-6&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-6&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -862,10 +844,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -901,15 +882,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-4&#34;&gt;&lt;a href=&#34;#IDA加载该程序-4&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-5&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-5&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -930,23 +911,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-4&#34;&gt;&lt;a href=&#34;#一道逆向题-4&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-5&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-5&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -972,8 +951,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -1007,10 +985,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -1025,12 +1002,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1046,9 +1021,11 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-4&#34;&gt;&lt;a href=&#34;#End-4&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-6&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-6&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-6&#34;&gt;&lt;a href=&#34;#this指针-6&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;h3 id=&#34;end-5&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-5&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-7&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-7&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-7&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-7&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -1059,10 +1036,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -1098,15 +1074,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-5&#34;&gt;&lt;a href=&#34;#IDA加载该程序-5&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-6&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -1127,23 +1103,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-5&#34;&gt;&lt;a href=&#34;#一道逆向题-5&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-6&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -1169,8 +1143,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -1204,10 +1177,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -1222,12 +1194,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1243,8 +1213,9 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-5&#34;&gt;&lt;a href=&#34;#End-5&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;h3 id=&#34;IDA加载该程序-6&#34;&gt;&lt;a href=&#34;#IDA加载该程序-6&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;end-6&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-6&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;h3 id=&#34;ida加载该程序-7&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-7&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -1265,22 +1236,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-7&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-7&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-7&#34;&gt;&lt;a href=&#34;#this指针-7&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-8&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-8&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-8&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-8&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -1291,10 +1261,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -1330,15 +1299,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-7&#34;&gt;&lt;a href=&#34;#IDA加载该程序-7&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-8&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-8&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -1359,23 +1328,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-6&#34;&gt;&lt;a href=&#34;#一道逆向题-6&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-7&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-7&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -1401,8 +1368,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -1436,10 +1402,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -1454,12 +1419,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1475,9 +1438,10 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-6&#34;&gt;&lt;a href=&#34;#End-6&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-7&#34;&gt;&lt;a href=&#34;#一道逆向题-7&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;h3 id=&#34;end-7&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-7&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-8&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-8&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -1503,8 +1467,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -1538,10 +1501,11 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
-&lt;h2 id=&#34;Reverse中虚函数-x2F-虚表浅析-8&#34;&gt;&lt;a href=&#34;#Reverse中虚函数-x2F-虚表浅析-8&#34; class=&#34;headerlink&#34; title=&#34;Reverse中虚函数&amp;#x2F;虚表浅析&#34;&gt;&lt;/a&gt;Reverse中虚函数&amp;#x2F;虚表浅析&lt;/h2&gt;&lt;h3 id=&#34;this指针-8&#34;&gt;&lt;a href=&#34;#this指针-8&#34; class=&#34;headerlink&#34; title=&#34;this指针&#34;&gt;&lt;/a&gt;this指针&lt;/h3&gt;&lt;p&gt;在C++的类中，需要研究一个非常重要并且特殊的指针就是this指针：&lt;/p&gt;
-&lt;p&gt;一个简单的demo来测试一下this指针：&lt;/p&gt;
+&lt;h2 id=&#34;reverse中虚函数虚表浅析-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#reverse中虚函数虚表浅析-9&#34;&gt;#&lt;/a&gt; Reverse 中虚函数 / 虚表浅析&lt;/h2&gt;
+&lt;h3 id=&#34;this指针-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#this指针-9&#34;&gt;#&lt;/a&gt; this 指针&lt;/h3&gt;
+&lt;p&gt;在 C++ 的类中，需要研究一个非常重要并且特殊的指针就是 this 指针：&lt;/p&gt;
+&lt;p&gt;一个简单的 demo 来测试一下 this 指针：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;token function&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 	&lt;span class=&#34;token keyword&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;token class-name&#34;&gt;Test&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
 		&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; a&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
@@ -1552,10 +1516,9 @@ int main() &amp;#123;
 	test&lt;span class=&#34;token operator&#34;&gt;-&gt;&lt;/span&gt;a &lt;span class=&#34;token operator&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 	&lt;span class=&#34;token function&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;test&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;可以看到，直接取test的值就是a的值，这里的test就是this指针本身，而this指针的特性就是指向类的首地址，在对类进行内存分配时，this指针会默认指向该类的首地址：&lt;/p&gt;
+&lt;p&gt;可以看到，直接取 test 的值就是 a 的值，这里的 test 就是 this 指针本身，而 this 指针的特性就是指向类的首地址，在对类进行内存分配时，this 指针会默认指向该类的首地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821809.png&#34; alt=&#34;image-202202221821809&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关于类和结构体：其底层实现是一样的，所以 demo 中用 struct 和 class 的结果相同&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221821374.png&#34; alt=&#34;image-202202221821374&#34;&gt;&lt;/p&gt;
 &lt;p&gt;demo2：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;iostream&amp;gt;
@@ -1591,15 +1554,15 @@ int main() &amp;#123;
 	test-&amp;gt;func1();
 	printf(&amp;quot;%d&amp;quot;, *test);
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为&lt;code&gt;func1&lt;/code&gt;、&lt;code&gt;func2&lt;/code&gt;、&lt;code&gt;func3&lt;/code&gt;，我们注意到这里call的函数内容来自&lt;code&gt;[edx]&lt;/code&gt;、&lt;code&gt;[edx+4]&lt;/code&gt;、&lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名：：方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为 &lt;code&gt;func1&lt;/code&gt; 、 &lt;code&gt;func2&lt;/code&gt; 、 &lt;code&gt;func3&lt;/code&gt; ，我们注意到这里 call 的函数内容来自 &lt;code&gt;[edx]&lt;/code&gt; 、 &lt;code&gt;[edx+4]&lt;/code&gt; 、 &lt;code&gt;[edx+8]&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822350.png&#34; alt=&#34;image-202202221822350&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VS的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类or结构体中，如果其虚函数的数量大于1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
+&lt;p&gt;VS 的监视器中已经帮我们标注出来了，存在一个__vfptr，这里指针就是指向虚表的指针，对于一个类 or 结构体中，如果其虚函数的数量大于 1，那么编译器在初始化时会自动创建一个虚表，用来存储函数的地址，通过代码的编写顺序进行函数索引的映射，虚表中存放的就是函数定义的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822816.png&#34; alt=&#34;image-202202221822816&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是在VS中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
+&lt;p&gt;但是在 VS 中默认开启了增量链接，所以此时虚表中指向的还是一个跳转地址，跳转地址之后才是函数真正的位置：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822113.png&#34; alt=&#34;image-202202221822113&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822536.png&#34; alt=&#34;image-202202221822536&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;IDA加载该程序-8&#34;&gt;&lt;a href=&#34;#IDA加载该程序-8&#34; class=&#34;headerlink&#34; title=&#34;IDA加载该程序&#34;&gt;&lt;/a&gt;IDA加载该程序&lt;/h3&gt;&lt;p&gt;直接来到main函数：&lt;/p&gt;
+&lt;h3 id=&#34;ida加载该程序-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#ida加载该程序-9&#34;&gt;#&lt;/a&gt; IDA 加载该程序&lt;/h3&gt;
+&lt;p&gt;直接来到 main 函数：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; __cdecl &lt;span class=&#34;token function&#34;&gt;main_0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; argc&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;argv&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;envp&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
   _DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;token comment&#34;&gt;// [esp+Ch] [ebp-DCh]&lt;/span&gt;
@@ -1620,23 +1583,21 @@ int main() &amp;#123;
   &lt;span class=&#34;token function&#34;&gt;sub_411442&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;token string&#34;&gt;&#34;%d&#34;&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;v4&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;token number&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据源码，这一部分就是虚函数调用在IDA中的反编译结果：&lt;/p&gt;
+&lt;p&gt;根据源码，这一部分就是虚函数调用在 IDA 中的反编译结果：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(void (__thiscall **)(_DWORD *))*v6)(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 4))(v6);
 (*(void (__thiscall **)(_DWORD *))(*v6 + 8))(v6);&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里v6是指向v4，来到v4的初始化，可以看到存在一个&lt;code&gt;virtual function table&lt;/code&gt;也就是虚函数表：&lt;/p&gt;
+&lt;p&gt;这里 v6 是指向 v4，来到 v4 的初始化，可以看到存在一个 &lt;code&gt;virtual function table&lt;/code&gt;  也就是虚函数表：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_411880(_DWORD *this)
 &amp;#123;
   *this &amp;#x3D; &amp;amp;Test::&amp;#96;vftable&amp;#39;;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据前面VS中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
+&lt;p&gt;根据前面 VS 中的调试可以知道这个表中存放的是增量链接：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822914.png&#34; alt=&#34;image-202202221822914&#34;&gt;&lt;/p&gt;
-&lt;p&gt;基本上关于虚函数在IDA中的体现就介绍完了&lt;/p&gt;
-&lt;h3 id=&#34;一道逆向题-8&#34;&gt;&lt;a href=&#34;#一道逆向题-8&#34; class=&#34;headerlink&#34; title=&#34;一道逆向题&#34;&gt;&lt;/a&gt;一道逆向题&lt;/h3&gt;&lt;p&gt;SWPUCTF2019 easyRE，同样来到main函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
+&lt;p&gt;基本上关于虚函数在 IDA 中的体现就介绍完了&lt;/p&gt;
+&lt;h3 id=&#34;一道逆向题-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#一道逆向题-9&#34;&gt;#&lt;/a&gt; 一道逆向题&lt;/h3&gt;
+&lt;p&gt;SWPUCTF2019 easyRE，同样来到 main 函数，本文重点在虚函数的创建以及体现，其他部分不做分析：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;int __cdecl main(int argc, const char **argv, const char **envp)
 &amp;#123;
   _DWORD v4[28]; &amp;#x2F;&amp;#x2F; [esp-6Ch] [ebp-F8h] BYREF
@@ -1662,8 +1623,7 @@ int main() &amp;#123;
   sub_4021C0(v8);
   return v7;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;进入sub_401FE0:&lt;/p&gt;
+&lt;p&gt;进入 sub_401FE0:&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;_DWORD *__thiscall sub_401FE0(_DWORD *this)
 &amp;#123;
   int i; &amp;#x2F;&amp;#x2F; [esp+4h] [ebp-14h]
@@ -1697,10 +1657,9 @@ int main() &amp;#123;
     *((_BYTE *)this + i + 12) &amp;#x3D; 0;
   return this;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;该题目中不存在增量链接，所以这里的虚函数表中指向的就是函数真正的地址：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202221822478.png&#34; alt=&#34;image-202202221822478&#34;&gt;&lt;/p&gt;
-&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -1715,12 +1674,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1736,8 +1693,8 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-7&#34;&gt;&lt;a href=&#34;#End-7&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;&lt;p&gt;来到校验flag的函数，可以发现存在虚函数的特征：&lt;/p&gt;
+&lt;h3 id=&#34;end-8&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-8&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+&lt;p&gt;来到校验 flag 的函数，可以发现存在虚函数的特征：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;BOOL __thiscall sub_4024B0(_DWORD *this, int flag)
 &amp;#123;
   BOOL result; &amp;#x2F;&amp;#x2F; eax
@@ -1752,12 +1709,10 @@ int main() &amp;#123;
   &amp;#125;
   return result;
 &amp;#125;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这里this指针指向的首地址是&lt;code&gt;0x4124E4&lt;/code&gt;，根据偏移可以映射：&lt;/p&gt;
+&lt;p&gt;这里 this 指针指向的首地址是 &lt;code&gt;0x4124E4&lt;/code&gt; ，根据偏移可以映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c++&#34; data-language=&#34;c++&#34;&gt;&lt;code class=&#34;language-c++&#34;&gt;(*(int (__thiscall **)(_DWORD *))(*this + 0xC))(this) -&amp;gt; 0x4124F0 -&amp;gt; sub_402500
 (*(void (__thiscall **)(_DWORD *))(*this + 0x18))(this) -&amp;gt; 0x4124FC -&amp;gt; sub_4026E0
 (*(int (__thiscall **)(_DWORD *))(*this + 0x28))(this) -&amp;gt; 0x41250C -&amp;gt; sub_402A00&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;映射：&lt;/p&gt;
 &lt;pre class=&#34;line-numbers language-c&#34; data-language=&#34;c&#34;&gt;&lt;code class=&#34;language-c&#34;&gt;BOOL __thiscall &lt;span class=&#34;token function&#34;&gt;sub_4024B0&lt;/span&gt;&lt;span class=&#34;token punctuation&#34;&gt;(&lt;/span&gt;_DWORD &lt;span class=&#34;token operator&#34;&gt;*&lt;/span&gt;this&lt;span class=&#34;token punctuation&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;token keyword&#34;&gt;int&lt;/span&gt; flag&lt;span class=&#34;token punctuation&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#123;&lt;/span&gt;
@@ -1773,8 +1728,8 @@ int main() &amp;#123;
   &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;
   &lt;span class=&#34;token keyword&#34;&gt;return&lt;/span&gt; result&lt;span class=&#34;token punctuation&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;token punctuation&#34;&gt;&amp;#125;&lt;/span&gt;&lt;span aria-hidden=&#34;true&#34; class=&#34;line-numbers-rows&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;End-8&#34;&gt;&lt;a href=&#34;#End-8&#34; class=&#34;headerlink&#34; title=&#34;End&#34;&gt;&lt;/a&gt;End&lt;/h3&gt;</content>
+&lt;h3 id=&#34;end-9&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#end-9&#34;&gt;#&lt;/a&gt; End&lt;/h3&gt;
+</content>
         <category term="C++, Reverse" />
         <updated>2022-02-17T10:00:09.000Z</updated>
     </entry>
