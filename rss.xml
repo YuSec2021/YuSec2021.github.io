@@ -5,10 +5,19 @@
         <link>https://YuSec2021.github.io</link>
         <description>Record My Learning</description>
         <language>en</language>
-        <pubDate>Thu, 17 Feb 2022 18:00:09 +0800</pubDate>
-        <lastBuildDate>Thu, 17 Feb 2022 18:00:09 +0800</lastBuildDate>
+        <pubDate>Thu, 24 Feb 2022 17:37:04 +0800</pubDate>
+        <lastBuildDate>Thu, 24 Feb 2022 17:37:04 +0800</lastBuildDate>
         <category>Reverse</category>
         <category>C++</category>
+        <item>
+            <guid isPermalink="true">https://yusec2021.github.io/2022/02/24/test1/</guid>
+            <title>test1</title>
+            <link>https://yusec2021.github.io/2022/02/24/test1/</link>
+            <pubDate>Thu, 24 Feb 2022 17:37:04 +0800</pubDate>
+            <description><![CDATA[ &lt;h1 id=&#34;test1&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#test1&#34;&gt;#&lt;/a&gt; Test1&lt;/h1&gt;
+&lt;p&gt;&amp;lt;!–code￼0–&amp;gt;&lt;/p&gt;
+ ]]></description>
+        </item>
         <item>
             <guid isPermalink="true">https://yusec2021.github.io/2022/02/17/VirtualFunction/</guid>
             <title>虚函数及虚表逆向浅析</title>

@@ -3,9 +3,18 @@
     <id>https://YuSec2021.github.io</id>
     <title>YuSec2021</title>
     <link href="https://YuSec2021.github.io" />
-    <updated>2022-02-17T10:00:09.000Z</updated>
+    <updated>2022-02-24T09:37:04.000Z</updated>
     <category term="Reverse" />
     <category term="C++" />
+    <entry>
+        <id>https://yusec2021.github.io/2022/02/24/test1/</id>
+        <title>test1</title>
+        <link rel="alternate" href="https://yusec2021.github.io/2022/02/24/test1/"/>
+        <content type="html">&lt;h1 id=&#34;test1&#34;&gt;&lt;a class=&#34;markdownIt-Anchor&#34; href=&#34;#test1&#34;&gt;#&lt;/a&gt; Test1&lt;/h1&gt;
+&lt;p&gt;&amp;lt;!–code￼0–&amp;gt;&lt;/p&gt;
+</content>
+        <updated>2022-02-24T09:37:04.000Z</updated>
+    </entry>
     <entry>
         <id>https://yusec2021.github.io/2022/02/17/VirtualFunction/</id>
         <title>虚函数及虚表逆向浅析</title>
