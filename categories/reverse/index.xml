@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on YuSec2021</title>
-    <link>https://YuSec2021.github.io/post/</link>
-    <description>Recent content in Posts on YuSec2021</description>
+    <title>Reverse on YuSec2021</title>
+    <link>https://YuSec2021.github.io/categories/reverse/</link>
+    <description>Recent content in Reverse on YuSec2021</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Feb 2022 10:16:02 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 25 Feb 2022 10:16:02 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/categories/reverse/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>[ACTF新生赛2020]Splendid_MineCraft</title>
       <link>https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/</link>
@@ -29,21 +29,6 @@
 关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同
 demo2：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33  #include &amp;lt;iostream&amp;gt;using namespace std; struct Test { int a; int b; int c; virtual void func1(); virtual void func2(); virtual void func3(); }; void Test::func1() { printf(&amp;#34;func1&amp;#34;); } void Test::func2() { printf(&amp;#34;func2&amp;#34;); } void Test::func3() { printf(&amp;#34;func3&amp;#34;); } int main() { Test* test = new Test; test-&amp;gt;a = 100; test-&amp;gt;func1(); printf(&amp;#34;%d&amp;#34;, *test); }   这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为func1、func2、func3，我们注意到这里call的函数内容来自[edx]、[edx+4]、[edx+8]</description>
-    </item>
-    
-    <item>
-      <title>Chinese Test</title>
-      <link>https://YuSec2021.github.io/p/test-chinese/</link>
-      <pubDate>Wed, 01 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://YuSec2021.github.io/p/test-chinese/</guid>
-      <description>正文测试 Welcome to my Blog, I&amp;rsquo;m a Reverse Engineer in Shanghai.
-引用  思念是最暖的忧伤像一双翅膀
-让我停不了飞不远在过往游荡
-不告而别的你 就算为了我着想
-这么沉痛的呵护 我怎么能翱翔
-最暖的憂傷 - 田馥甄
- 图片 1 2 3  ![Photo by Florian Klauer on Unsplash](florian-klauer-nptLmg6jqDo-unsplash.jpg) ![Photo by Luca Bravo on Unsplash](luca-bravo-alS7ewQ41M8-unsplash.jpg) ![Photo by Helena Hertz on Unsplash](helena-hertz-wWZzXlDpMog-unsplash.jpg) ![Photo by Hudai Gayiran on Unsplash](hudai-gayiran-3Od_VKcDEAA-unsplash.jpg)   相册语法来自 Typlog</description>
     </item>
     
   </channel>
