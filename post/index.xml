@@ -13,7 +13,7 @@
       <pubDate>Fri, 25 Feb 2022 10:16:02 +0800</pubDate>
       
       <guid>https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/</guid>
-      <description>[ACTF新生赛2020]Splendid_MineCraft 反编译源码：
+      <description>[ACTF新生赛2020]Splendid_MineCraft 解密字节码 反编译源码：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  int __cdecl main(int argc, const char **argv, const char **envp) { char *v3; // eax  char *v4; // eax  char v6; // [esp+0h] [ebp-68h]  int i; // [esp+14h] [ebp-54h]  char *v8; // [esp+18h] [ebp-50h]  char v9; // [esp+20h] [ebp-48h]  char flag[25]; // [esp+24h] [ebp-44h] BYREF  char v11[25]; // [esp+25h] [ebp-43h] BYREF  char v12; // [esp+3Dh] [ebp-2Bh]  int v13; // [esp+44h] [ebp-24h]  __int16 v14; // [esp+48h] [ebp-20h]  char v15[4]; // [esp+4Ch] [ebp-1Ch]  __int16 v16; // [esp+50h] [ebp-18h]  int v17; // [esp+54h] [ebp-14h] BYREF  __int16 v18; // [esp+58h] [ebp-10h]  int v19; // [esp+5Ch] [ebp-Ch]  __int16 v20; // [esp+60h] [ebp-8h]  sub_401020(&amp;#34;%s\n&amp;#34;, (char)aWelcomeToActfS); sub_401050(&amp;#34;%s&amp;#34;, (char)flag); if ( &amp;amp;flag[strlen(flag) + 1] - v11 == 26 &amp;amp;&amp;amp; !</description>
     </item>
     

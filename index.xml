@@ -13,6 +13,7 @@
         
         <guid>https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/</guid>
         <description>&lt;h2 id=&#34;actf新生赛2020splendid_minecraft&#34;&gt;[ACTF新生赛2020]Splendid_MineCraft&lt;/h2&gt;
+&lt;h3 id=&#34;解密字节码&#34;&gt;解密字节码&lt;/h3&gt;
 &lt;p&gt;反编译源码：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -233,6 +234,7 @@
 	
 	
 &gt;&lt;/p&gt;
+&lt;h3 id=&#34;第一部分解密&#34;&gt;第一部分解密&lt;/h3&gt;
 &lt;p&gt;解密之后的push ebp才是真正的函数开始，该函数先是往内存写值，一个是&lt;code&gt;3@1b;b&lt;/code&gt;，一个是&lt;code&gt;Welcome&lt;/code&gt;：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202231135336.png&#34;
 	
@@ -383,6 +385,7 @@
 	
 	
 &gt;&lt;/p&gt;
+&lt;h3 id=&#34;第二部分解密&#34;&gt;第二部分解密&lt;/h3&gt;
 &lt;p&gt;往下来到第二个部分的验证：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202231137423.png&#34;
 	
@@ -563,6 +566,7 @@ key = res[0] ^ res[1] ^ res[3] ^ res[0] ^ res[5] ^ res[2] =
 	
 	
 &gt;&lt;/p&gt;
+&lt;h3 id=&#34;第三部分解密&#34;&gt;第三部分解密&lt;/h3&gt;
 &lt;p&gt;第三部分字符串发现就是直接进行strncmp:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202202231138309.png&#34;
 	
@@ -575,15 +579,9 @@ key = res[0] ^ res[1] ^ res[3] ^ res[0] ^ res[5] ^ res[2] =
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;可以得到第三部分的字符串为：&lt;code&gt;5mcsM&amp;lt;&lt;/code&gt;，最终flag：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ACTF{yOu0y*_knowo3_5mcsM&amp;lt;}&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;exp&#34;&gt;Exp&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-f&#34; data-lang=&#34;f&#34;&gt;&lt;span class=&#34;nl&#34;&gt;ACTF{&lt;/span&gt;&lt;span class=&#34;gs&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Ou0y&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;knowo3_5mcsM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
