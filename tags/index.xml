@@ -5,6 +5,34 @@
     <link>https://YuSec2021.github.io/tags/</link>
     <description>Recent content in Tags on YuSec2021</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://YuSec2021.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://YuSec2021.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://YuSec2021.github.io/tags/c&#43;&#43;/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://YuSec2021.github.io/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://YuSec2021.github.io/tags/python/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://YuSec2021.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reverse</title>
+      <link>https://YuSec2021.github.io/tags/reverse/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://YuSec2021.github.io/tags/reverse/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

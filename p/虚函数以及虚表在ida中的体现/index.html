@@ -27,7 +27,7 @@ demo2：
 关于类和结构体：其底层实现是一样的，所以demo中用struct和class的结果相同
 demo2：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33  #include &amp;lt;iostream&amp;gt;using namespace std; struct Test { int a; int b; int c; virtual void func1(); virtual void func2(); virtual void func3(); }; void Test::func1() { printf(&amp;#34;func1&amp;#34;); } void Test::func2() { printf(&amp;#34;func2&amp;#34;); } void Test::func3() { printf(&amp;#34;func3&amp;#34;); } int main() { Test* test = new Test; test-&amp;gt;a = 100; test-&amp;gt;func1(); printf(&amp;#34;%d&amp;#34;, *test); }   这里我定义了一个结构体，带着三个虚函数，虚函数需要定义，通过结构体名::方法名的形式进行定义，重点在实例化对象调用函数的位置，调试来到反汇编窗口，红框中标注的为实际调用函数的位置，这里我们在声明结构体时从上到下的声明为func1、func2、func3，我们注意到这里call的函数内容来自[edx]、[edx&#43;4]、[edx&#43;8]">
-    <link rel="shortcut icon" href="#ZgotmplZ" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
 
     </head>
     <body class="
@@ -108,7 +108,7 @@ demo2：
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Feb 25, 2022</time>
+                <time class="article-time--published">Feb 25, 252525</time>
             </div>
         
 
@@ -642,6 +642,29 @@ demo2：
 
 
     
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
 </article>
 
     
@@ -655,36 +678,48 @@ demo2：
                 
                     
 <article class="">
-    <a href="/p/ctf/rctf2019_donteatme/">
+    <a href="/p/actf2020-splendid_minecraft/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">[RCTF2019]DontEatMe</h2>
+            <h2 class="article-title">ACTF2020 Splendid_Minecraft</h2>
         </div>
     </a>
 </article>
                 
                     
 <article class="">
-    <a href="/p/ctf/swpu2019_easyre/">
+    <a href="/p/rctf2019-donteatme/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">[SWPUCTF2019]easyRE</h2>
+            <h2 class="article-title">RCTF2019-DontEatMe</h2>
         </div>
     </a>
 </article>
                 
                     
 <article class="">
-    <a href="/p/ctf/actf2020_splendid_minecraft/">
+    <a href="/p/swpu2019-easyre/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">[ACTF新生赛2020]Splendid_MineCraft</h2>
+            <h2 class="article-title">SWPU2019 easyRE</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/%E5%BC%BA%E7%BD%91%E6%9D%AF%E4%BC%81%E4%B8%9A%E7%BB%84simplere/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">强网杯企业组SimpleRE</h2>
         </div>
     </a>
 </article>

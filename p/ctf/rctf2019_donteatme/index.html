@@ -1,33 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='[RCTF2019]DontEatMe 去反调试 EXE文件，IDA反编译：
-通过srand固定时间戳生成伪随机数，然后在调用rand之前，有一段反调试：
-拿到Ntdll的模块句柄，从句柄中查找ZwSetInformationThread的地址，然后调用这个函数去检查当前线程是否处于Debug模式下：
-1 2 3 4  v3 = GetModuleHandleA(&amp;#34;Ntdll&amp;#34;); ZwSetInformationThread = GetProcAddress(v3, &amp;#34;ZwSetInformationThread&amp;#34;); v5 = GetCurrentThread(); ((void (__stdcall *)(HANDLE, int, _DWORD, _DWORD))ZwSetInformationThread)(v5, 17, 0, 0);   关于ZwSetInformationThread的类型：
-1 2 3 4 5 6  typedef NTSTATUS(NTAPI* pZwSetInformationThread)( IN HANDLE ThreadHandle,	// 线程对象句柄 	IN THREAD_INFO_CLASS ThreadInformaitonClass,	// 线程信息类型 	IN PVOID ThreadInformation,	// 线程信息指针 	IN ULONG ThreadInformationLength	// 线程信息大小 );   线程信息类型为枚举类型：
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  typedef enum _THREADINFOCLASS { ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger }THREAD_INFO_CLASS;   该程序中载入的参数就是ThreadHideFromDebugger，此时如果检测到处理Debugger模式就会将该线程强制分离出调试器，该函数与IsDebuggerPresent类似都是用于反调试的'><title>[RCTF2019]DontEatMe</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='RCTF 2019 逆向题'><title>DontEatMe 详细分析及解题过程</title>
 
 <link rel='canonical' href='https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/'>
 
-<link rel="stylesheet" href="/scss/style.min.b949db8bead9abdc40291b93383b8da6abc3aa62e74f5580356c06ddbb792dab.css"><meta property='og:title' content='[RCTF2019]DontEatMe'>
-<meta property='og:description' content='[RCTF2019]DontEatMe 去反调试 EXE文件，IDA反编译：
-通过srand固定时间戳生成伪随机数，然后在调用rand之前，有一段反调试：
-拿到Ntdll的模块句柄，从句柄中查找ZwSetInformationThread的地址，然后调用这个函数去检查当前线程是否处于Debug模式下：
-1 2 3 4  v3 = GetModuleHandleA(&amp;#34;Ntdll&amp;#34;); ZwSetInformationThread = GetProcAddress(v3, &amp;#34;ZwSetInformationThread&amp;#34;); v5 = GetCurrentThread(); ((void (__stdcall *)(HANDLE, int, _DWORD, _DWORD))ZwSetInformationThread)(v5, 17, 0, 0);   关于ZwSetInformationThread的类型：
-1 2 3 4 5 6  typedef NTSTATUS(NTAPI* pZwSetInformationThread)( IN HANDLE ThreadHandle,	// 线程对象句柄 	IN THREAD_INFO_CLASS ThreadInformaitonClass,	// 线程信息类型 	IN PVOID ThreadInformation,	// 线程信息指针 	IN ULONG ThreadInformationLength	// 线程信息大小 );   线程信息类型为枚举类型：
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  typedef enum _THREADINFOCLASS { ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger }THREAD_INFO_CLASS;   该程序中载入的参数就是ThreadHideFromDebugger，此时如果检测到处理Debugger模式就会将该线程强制分离出调试器，该函数与IsDebuggerPresent类似都是用于反调试的'>
+<link rel="stylesheet" href="/scss/style.min.b949db8bead9abdc40291b93383b8da6abc3aa62e74f5580356c06ddbb792dab.css"><meta property='og:title' content='DontEatMe 详细分析及解题过程'>
+<meta property='og:description' content='RCTF 2019 逆向题'>
 <meta property='og:url' content='https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/'>
 <meta property='og:site_name' content='YuSec2021'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2022-03-01T11:00:00&#43;08:00'/><meta property='article:modified_time' content='2022-03-01T11:00:00&#43;08:00'/>
-<meta name="twitter:title" content="[RCTF2019]DontEatMe">
-<meta name="twitter:description" content="[RCTF2019]DontEatMe 去反调试 EXE文件，IDA反编译：
-通过srand固定时间戳生成伪随机数，然后在调用rand之前，有一段反调试：
-拿到Ntdll的模块句柄，从句柄中查找ZwSetInformationThread的地址，然后调用这个函数去检查当前线程是否处于Debug模式下：
-1 2 3 4  v3 = GetModuleHandleA(&amp;#34;Ntdll&amp;#34;); ZwSetInformationThread = GetProcAddress(v3, &amp;#34;ZwSetInformationThread&amp;#34;); v5 = GetCurrentThread(); ((void (__stdcall *)(HANDLE, int, _DWORD, _DWORD))ZwSetInformationThread)(v5, 17, 0, 0);   关于ZwSetInformationThread的类型：
-1 2 3 4 5 6  typedef NTSTATUS(NTAPI* pZwSetInformationThread)( IN HANDLE ThreadHandle,	// 线程对象句柄 	IN THREAD_INFO_CLASS ThreadInformaitonClass,	// 线程信息类型 	IN PVOID ThreadInformation,	// 线程信息指针 	IN ULONG ThreadInformationLength	// 线程信息大小 );   线程信息类型为枚举类型：
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  typedef enum _THREADINFOCLASS { ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger }THREAD_INFO_CLASS;   该程序中载入的参数就是ThreadHideFromDebugger，此时如果检测到处理Debugger模式就会将该线程强制分离出调试器，该函数与IsDebuggerPresent类似都是用于反调试的">
-    <link rel="shortcut icon" href="#ZgotmplZ" />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='Reverse' /><meta property='article:tag' content='Python' /><meta property='article:published_time' content='2022-03-01T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-01T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="DontEatMe 详细分析及解题过程">
+<meta name="twitter:description" content="RCTF 2019 逆向题">
+    <link rel="shortcut icon" href="img/favicon.ico" />
 
     </head>
     <body class="
@@ -90,9 +75,13 @@
     
 
     <h2 class="article-title">
-        <a href="/p/ctf/rctf2019_donteatme/">[RCTF2019]DontEatMe</a>
+        <a href="/p/ctf/rctf2019_donteatme/">DontEatMe 详细分析及解题过程</a>
     </h2>
 
+    
+    <h3 class="article-subtitle">
+        RCTF 2019 逆向题
+    </h3>
     
 
     
@@ -1596,6 +1585,16 @@
 
     <footer class="article-footer">
     
+    <section class="article-tags">
+        
+            <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+        
+            <a href="/tags/reverse/">Reverse</a>
+        
+            <a href="/tags/python/">Python</a>
+        
+    </section>
+
 
     
     <section class="article-copyright">
@@ -1626,12 +1625,12 @@
                 
                     
 <article class="">
-    <a href="/p/ctf/swpu2019_easyre/">
+    <a href="/p/ctf/qiangwang_re/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">[SWPUCTF2019]easyRE</h2>
+            <h2 class="article-title">SimpleRE 分析及解题脚本</h2>
         </div>
     </a>
 </article>
@@ -1643,14 +1642,26 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">[ACTF新生赛2020]Splendid_MineCraft</h2>
+            <h2 class="article-title">Splendid_Minecraft 解析及脚本</h2>
         </div>
     </a>
 </article>
                 
                     
 <article class="">
-    <a href="/p/%E8%99%9A%E5%87%BD%E6%95%B0%E4%BB%A5%E5%8F%8A%E8%99%9A%E8%A1%A8%E5%9C%A8ida%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0/">
+    <a href="/p/ctf/swpuctf2019_easyre/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">easyRE 解题脚本及详细分析过程</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tech/vfunc_vtable/">
         
         
 

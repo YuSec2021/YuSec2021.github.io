@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='强网杯企业组Re题'><title>SimpleRE 分析及解题脚本</title>
+
+<link rel='canonical' href='https://YuSec2021.github.io/p/ctf/qiangwang_re/'>
+
+<link rel="stylesheet" href="/scss/style.min.b949db8bead9abdc40291b93383b8da6abc3aa62e74f5580356c06ddbb792dab.css"><meta property='og:title' content='SimpleRE 分析及解题脚本'>
+<meta property='og:description' content='强网杯企业组Re题'>
+<meta property='og:url' content='https://YuSec2021.github.io/p/ctf/qiangwang_re/'>
+<meta property='og:site_name' content='YuSec2021'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='Reverse' /><meta property='article:tag' content='Python' /><meta property='article:published_time' content='2022-03-01T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-01T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="SimpleRE 分析及解题脚本">
+<meta name="twitter:description" content="强网杯企业组Re题">
+    <link rel="shortcut icon" href="img/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/reverse/" >
+                Reverse
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/ctf/qiangwang_re/">SimpleRE 分析及解题脚本</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        强网杯企业组Re题
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 01, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    9 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h3 id="解题">解题</h3>
+<p>ELF64程序，无壳，IDA反编译main函数，这里我稍微做了重命名，看起来比较清楚：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kr">__int64</span> <span class="kr">__fastcall</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a2</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a3</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kr">__int64</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// rax
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">suf_flag</span><span class="p">[</span><span class="mi">33</span><span class="p">];</span> <span class="c1">// [rsp+0h] [rbp-250h] BYREF
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">pre_flag</span><span class="p">[</span><span class="mi">15</span><span class="p">];</span> <span class="c1">// [rsp+21h] [rbp-22Fh] BYREF
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">v6</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span> <span class="c1">// [rsp+30h] [rbp-220h] BYREF
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">encode_flag</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span> <span class="c1">// [rsp+130h] [rbp-120h] BYREF
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="o">*</span><span class="n">src</span><span class="p">;</span> <span class="c1">// [rsp+230h] [rbp-20h]
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="o">*</span><span class="n">dest</span><span class="p">;</span> <span class="c1">// [rsp+238h] [rbp-18h]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">v10</span><span class="p">;</span> <span class="c1">// [rsp+244h] [rbp-Ch]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">j</span><span class="p">;</span> <span class="c1">// [rsp+248h] [rbp-8h]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [rsp+24Ch] [rbp-4h]
+</span><span class="c1"></span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;your flag:&#34;</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">v6</span><span class="p">);</span>
+  <span class="n">putchar</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">v6</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">14</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+      <span class="n">pre_flag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v6</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">17</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+      <span class="n">suf_flag</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v6</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">16</span><span class="p">];</span>
+    <span class="n">v10</span> <span class="o">=</span> <span class="n">decode_puzzle</span><span class="p">((</span><span class="kr">__int64</span><span class="p">)</span><span class="n">pre_flag</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">v10</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">dest</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0LL</span><span class="p">,</span> <span class="mh">0x1000uLL</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
+      <span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">generate_machine_code</span><span class="p">();</span>
+      <span class="n">memcpy</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="mh">0x28CuLL</span><span class="p">);</span>
+      <span class="p">((</span><span class="kt">void</span> <span class="p">(</span><span class="kr">__fastcall</span> <span class="o">*</span><span class="p">)(</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">))</span><span class="n">dest</span><span class="p">)(</span><span class="n">encode_flag</span><span class="p">,</span> <span class="n">suf_flag</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">unk_404320</span><span class="p">);</span>
+      <span class="n">v10</span> <span class="o">=</span> <span class="n">check_encode</span><span class="p">(</span><span class="n">encode_flag</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="n">v10</span> <span class="p">)</span>
+        <span class="n">puts</span><span class="p">(</span><span class="s">&#34;congratulations!&#34;</span><span class="p">);</span>
+      <span class="k">else</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;nonono&#34;</span><span class="p">);</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">0LL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;nonono&#34;</span><span class="p">);</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="mi">0LL</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;nonono&#34;</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0LL</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到flag是通过<code>-</code>分成两部分进行校验：</p>
+<p>第一部分是通过一个迷宫puzzle，其走法即为上半部分flag，这里只能走<code>.</code>，终点为<code>B</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kr">__int64</span> <span class="kr">__fastcall</span> <span class="nf">sub_401192</span><span class="p">(</span><span class="kr">__int64</span> <span class="n">a1</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">v1</span><span class="p">;</span> <span class="c1">// eax
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [rsp+Ch] [rbp-Ch]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">line</span><span class="p">;</span> <span class="c1">// [rsp+10h] [rbp-8h]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">row</span><span class="p">;</span> <span class="c1">// [rsp+14h] [rbp-4h]
+</span><span class="c1"></span>
+  <span class="n">row</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">14</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kr">__int8</span> <span class="o">*</span><span class="p">)(</span><span class="n">i</span> <span class="o">+</span> <span class="n">a1</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">v1</span> <span class="o">==</span> <span class="sc">&#39;w&#39;</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="o">--</span><span class="n">line</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kr">__int8</span> <span class="o">*</span><span class="p">)(</span><span class="n">i</span> <span class="o">+</span> <span class="n">a1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mh">0x77u</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="n">v1</span> <span class="o">==</span> <span class="sc">&#39;s&#39;</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="o">++</span><span class="n">line</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kr">__int8</span> <span class="o">*</span><span class="p">)(</span><span class="n">i</span> <span class="o">+</span> <span class="n">a1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mh">0x73u</span> <span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">v1</span> <span class="o">==</span> <span class="sc">&#39;a&#39;</span> <span class="p">)</span>
+        <span class="p">{</span>
+          <span class="o">--</span><span class="n">row</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="n">v1</span> <span class="o">==</span> <span class="sc">&#39;d&#39;</span> <span class="p">)</span>
+        <span class="p">{</span>
+          <span class="o">++</span><span class="n">row</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">aAB</span><span class="p">[</span><span class="mi">11</span> <span class="o">*</span> <span class="n">line</span> <span class="o">+</span> <span class="n">row</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;B&#39;</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="mi">1LL</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">aAB</span><span class="p">[</span><span class="mi">11</span> <span class="o">*</span> <span class="n">line</span> <span class="o">+</span> <span class="n">row</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;.&#39;</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="mi">0LL</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0LL</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>根据下标的获取，很容易知道这是一个11列的矩阵，根据这个就可以划出迷宫了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="o">*</span><span class="n">A</span><span class="o">*********</span>
+<span class="o">*</span><span class="p">.</span><span class="o">***</span><span class="p">.....</span><span class="o">*</span>
+<span class="o">*</span><span class="p">.....</span><span class="o">***</span><span class="p">.</span><span class="o">*</span>
+<span class="o">********</span><span class="p">..</span><span class="o">*</span>
+<span class="o">********</span><span class="n">B</span><span class="o">**</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>得到上半部分的flag：<code>ssddddwddddssas</code></p>
+<p>下半部分的关键在这五行代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">dest</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0LL</span><span class="p">,</span> <span class="mh">0x1000uLL</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0LL</span><span class="p">);</span>
+<span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">generate_machine_code</span><span class="p">();</span>
+<span class="n">memcpy</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="mh">0x28CuLL</span><span class="p">);</span>
+<span class="p">((</span><span class="kt">void</span> <span class="p">(</span><span class="kr">__fastcall</span> <span class="o">*</span><span class="p">)(</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">))</span><span class="n">dest</span><span class="p">)(</span><span class="n">encode_flag</span><span class="p">,</span> <span class="n">suf_flag</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">unk_404320</span><span class="p">);</span>
+<span class="n">v10</span> <span class="o">=</span> <span class="n">check_encode</span><span class="p">(</span><span class="n">encode_flag</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>IDA反编译中调用mmap进行地址映射，然后调用<code>generate_machine_code()</code>来生成机器码，将这里的数据赋值到mmap映射的地址中，然后传入三个参数，将<code>suf_flag</code>作为text，<code>unk_404320</code>作为key进行加密，得到的结果存入<code>encode_flag</code>中，最后与<code>r60ihyZ/m4lseHt+m4t+mIkc</code>进行比较
+所以这里关键就在机器码生成和key的处理：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">_BYTE</span> <span class="o">*</span><span class="nf">generate_machine_code</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">_BYTE</span> <span class="o">*</span><span class="n">v1</span><span class="p">;</span> <span class="c1">// [rsp+8h] [rbp-18h]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">j</span><span class="p">;</span> <span class="c1">// [rsp+14h] [rbp-Ch]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [rsp+18h] [rbp-8h]
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">v4</span><span class="p">;</span> <span class="c1">// [rsp+1Ch] [rbp-4h]
+</span><span class="c1"></span>
+  <span class="n">v1</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mh">0x200uLL</span><span class="p">);</span>
+  <span class="n">v4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">652</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">v4</span> <span class="o">==</span> <span class="mi">64</span> <span class="p">)</span>
+      <span class="n">v4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">byte_404080</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">byte_404360</span><span class="p">[</span><span class="n">v4</span><span class="o">++</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">63</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+    <span class="n">byte_404320</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">^=</span> <span class="n">byte_404360</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+  <span class="k">return</span> <span class="n">v1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>python脚本生成一下数据，生成机器码和加密用的key：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">byte_404360</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;3E&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;40&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;60&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;5D&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="s1">&#39;4C&#39;</span><span class="p">,</span> <span class="s1">&#39;4B&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;47&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="s1">&#39;74&#39;</span><span class="p">,</span> <span class="s1">&#39;7D&#39;</span><span class="p">,</span> <span class="s1">&#39;2C&#39;</span><span class="p">,</span> <span class="s1">&#39;2B&#39;</span><span class="p">,</span> <span class="s1">&#39;4A&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;70&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;65&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;3D&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">]</span>
+<span class="n">byte_404320</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;39&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;66&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;60&#39;</span><span class="p">,</span> <span class="s1">&#39;76&#39;</span><span class="p">,</span> <span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;7B&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;0F&#39;</span><span class="p">,</span> <span class="s1">&#39;2E&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;66&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;6E&#39;</span><span class="p">,</span> <span class="s1">&#39;69&#39;</span><span class="p">,</span> <span class="s1">&#39;2F&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;6A&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;2A&#39;</span><span class="p">,</span> <span class="s1">&#39;6B&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">]</span>
+<span class="n">byte_404380</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;6B&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;C9&#39;</span><span class="p">,</span> <span class="s1">&#39;81&#39;</span><span class="p">,</span> <span class="s1">&#39;6F&#39;</span><span class="p">,</span> <span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;DC&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;EA&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;95&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;C5&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;C7&#39;</span><span class="p">,</span> <span class="s1">&#39;0E&#39;</span><span class="p">,</span> <span class="s1">&#39;D6&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;DD&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;8E&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B8&#39;</span><span class="p">,</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;B8&#39;</span><span class="p">,</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span> <span class="s1">&#39;8D&#39;</span><span class="p">,</span> <span class="s1">&#39;2D&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;AD&#39;</span><span class="p">,</span> <span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;C7&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;2D&#39;</span><span class="p">,</span> <span class="s1">&#39;82&#39;</span><span class="p">,</span> <span class="s1">&#39;6F&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="s1">&#39;67&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;1C&#39;</span><span class="p">,</span> <span class="s1">&#39;76&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;88&#39;</span><span class="p">,</span> <span class="s1">&#39;2C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;CF&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;8D&#39;</span><span class="p">,</span> <span class="s1">&#39;81&#39;</span><span class="p">,</span> <span class="s1">&#39;2B&#39;</span><span class="p">,</span> <span class="s1">&#39;D8&#39;</span><span class="p">,</span> <span class="s1">&#39;9E&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;8D&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;67&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;B9&#39;</span><span class="p">,</span> <span class="s1">&#39;8E&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;8D&#39;</span><span class="p">,</span> <span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;D8&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;81&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;97&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;BE&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;71&#39;</span><span class="p">,</span> <span class="s1">&#39;D9&#39;</span><span class="p">,</span> <span class="s1">&#39;5B&#39;</span><span class="p">,</span> <span class="s1">&#39;BB&#39;</span><span class="p">,</span> <span class="s1">&#39;69&#39;</span><span class="p">,</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;5C&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;F6&#39;</span><span class="p">,</span> <span class="s1">&#39;91&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;98&#39;</span><span class="p">,</span> <span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;7E&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;B7&#39;</span><span class="p">,</span> <span class="s1">&#39;AA&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;EF&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;89&#39;</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">,</span> <span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;2B&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;9A&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;8A&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;0A&#39;</span><span class="p">,</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;BD&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;84&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;EC&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;C9&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;71&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;E9&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;F6&#39;</span><span class="p">,</span> <span class="s1">&#39;1C&#39;</span><span class="p">,</span> <span class="s1">&#39;94&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39;1D&#39;</span><span class="p">,</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;E6&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;0A&#39;</span><span class="p">,</span> <span class="s1">&#39;8F&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;54&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;86&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;57&#39;</span><span class="p">,</span> <span class="s1">&#39;A8&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;CC&#39;</span><span class="p">,</span> <span class="s1">&#39;1D&#39;</span><span class="p">,</span> <span class="s1">&#39;EB&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;7C&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;E9&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;D9&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;6A&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;AF&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;39&#39;</span><span class="p">,</span> <span class="s1">&#39;9B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;5E&#39;</span><span class="p">,</span> <span class="s1">&#39;F8&#39;</span><span class="p">,</span> <span class="s1">&#39;1D&#39;</span><span class="p">,</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39;1C&#39;</span><span class="p">,</span> <span class="s1">&#39;E6&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;AE&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;93&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;8C&#39;</span><span class="p">,</span> <span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;E8&#39;</span><span class="p">,</span> <span class="s1">&#39;5C&#39;</span><span class="p">,</span> <span class="s1">&#39;88&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;9A&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">,</span> <span class="s1">&#39;D7&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span> <span class="s1">&#39;9C&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;7C&#39;</span><span class="p">,</span> <span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;DA&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;E8&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;FF&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;74&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;5B&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;88&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;2D&#39;</span><span class="p">,</span><span class="s1">&#39;B6&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;99&#39;</span><span class="p">,</span> <span class="s1">&#39;84&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;7D&#39;</span><span class="p">,</span> <span class="s1">&#39;8B&#39;</span><span class="p">,</span> <span class="s1">&#39;F2&#39;</span><span class="p">,</span> <span class="s1">&#39;5C&#39;</span><span class="p">,</span> <span class="s1">&#39;91&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;5D&#39;</span><span class="p">,</span> <span class="s1">&#39;AA&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;EF&#39;</span><span class="p">,</span> <span class="s1">&#39;62&#39;</span><span class="p">,</span> <span class="s1">&#39;ED&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;9F&#39;</span><span class="p">,</span> <span class="s1">&#39;E8&#39;</span><span class="p">,</span> <span class="s1">&#39;4C&#39;</span><span class="p">,</span> <span class="s1">&#39;8C&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;A7&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;9C&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;BB&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;93&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;5E&#39;</span><span class="p">,</span> <span class="s1">&#39;B9&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;AC&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;AF&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;7C&#39;</span><span class="p">,</span> <span class="s1">&#39;2A&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;B7&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;3E&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">,</span> <span class="s1">&#39;6E&#39;</span><span class="p">,</span> <span class="s1">&#39;C6&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;6A&#39;</span><span class="p">,</span> <span class="s1">&#39;BF&#39;</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;9F&#39;</span><span class="p">,</span> <span class="s1">&#39;5B&#39;</span><span class="p">,</span> <span class="s1">&#39;EF&#39;</span><span class="p">,</span> <span class="s1">&#39;97&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;76&#39;</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;E9&#39;</span><span class="p">,</span> <span class="s1">&#39;6F&#39;</span><span class="p">,</span><span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;8F&#39;</span><span class="p">,</span> <span class="s1">&#39;0A&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;51&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;5D&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;A6&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;4B&#39;</span><span class="p">,</span> <span class="s1">&#39;86&#39;</span><span class="p">,</span> <span class="s1">&#39;8C&#39;</span><span class="p">,</span> <span class="s1">&#39;42&#39;</span><span class="p">,</span> <span class="s1">&#39;D6&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;DD&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;97&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">,</span> <span class="s1">&#39;6E&#39;</span><span class="p">,</span> <span class="s1">&#39;98&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span> <span class="s1">&#39;B9&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;AF&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;94&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;5B&#39;</span><span class="p">,</span> <span class="s1">&#39;E7&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;9A&#39;</span><span class="p">,</span><span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;AA&#39;</span><span class="p">,</span> <span class="s1">&#39;1D&#39;</span><span class="p">,</span> <span class="s1">&#39;CC&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;CB&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;D5&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;6F&#39;</span><span class="p">,</span> <span class="s1">&#39;BD&#39;</span><span class="p">,</span> <span class="s1">&#39;FA&#39;</span><span class="p">,</span> <span class="s1">&#39;F6&#39;</span><span class="p">,</span> <span class="s1">&#39;BD&#39;</span><span class="p">,</span> <span class="s1">&#39;2E&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;8E&#39;</span><span class="p">,</span> <span class="s1">&#39;86&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;C7&#39;</span><span class="p">,</span> <span class="s1">&#39;0E&#39;</span><span class="p">,</span> <span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;DD&#39;</span><span class="p">,</span> <span class="s1">&#39;91&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">,</span> <span class="s1">&#39;7C&#39;</span><span class="p">,</span> <span class="s1">&#39;1B&#39;</span><span class="p">,</span> <span class="s1">&#39;97&#39;</span><span class="p">,</span> <span class="s1">&#39;0F&#39;</span><span class="p">,</span> <span class="s1">&#39;D5&#39;</span><span class="p">,</span> <span class="s1">&#39;71&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;A7&#39;</span><span class="p">,</span> <span class="s1">&#39;7E&#39;</span><span class="p">,</span> <span class="s1">&#39;92&#39;</span><span class="p">,</span> <span class="s1">&#39;74&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;D9&#39;</span><span class="p">,</span> <span class="s1">&#39;0E&#39;</span><span class="p">,</span> <span class="s1">&#39;89&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;E9&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;83&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;CD&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;6B&#39;</span><span class="p">,</span> <span class="s1">&#39;82&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;E7&#39;</span><span class="p">,</span> <span class="s1">&#39;CD&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;3D&#39;</span><span class="p">,</span> <span class="s1">&#39;9F&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;95&#39;</span><span class="p">,</span> <span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="s1">&#39;F5&#39;</span><span class="p">,</span> <span class="s1">&#39;C5&#39;</span><span class="p">,</span> <span class="s1">&#39;8A&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;9A&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;0C&#39;</span><span class="p">,</span> <span class="s1">&#39;8A&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;0A&#39;</span><span class="p">,</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;BD&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;FD&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;EA&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;9A&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;2A&#39;</span><span class="p">,</span> <span class="s1">&#39;91&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">,</span> <span class="s1">&#39;A7&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;AE&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">,</span> <span class="s1">&#39;F5&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;7C&#39;</span><span class="p">,</span> <span class="s1">&#39;91&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;BD&#39;</span><span class="p">,</span> <span class="s1">&#39;82&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2F&#39;</span><span class="p">,</span> <span class="s1">&#39;6D&#39;</span><span class="p">,</span> <span class="s1">&#39;CB&#39;</span><span class="p">,</span> <span class="s1">&#39;FC&#39;</span><span class="p">,</span> <span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;8B&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;D6&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;C9&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;8D&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;1B&#39;</span><span class="p">,</span> <span class="s1">&#39;E8&#39;</span><span class="p">,</span> <span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;CE&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;EC&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;7B&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;74&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span> <span class="s1">&#39;D9&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B6&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;8B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;B5&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;EF&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;62&#39;</span><span class="p">,</span> <span class="s1">&#39;AA&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;7B&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;65&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;39&#39;</span><span class="p">,</span> <span class="s1">&#39;DF&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">]</span>
+
+<span class="n">tmp_404360</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tmp_404320</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tmp_404380</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># 将16进制全部转成10进制</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_404360</span><span class="p">:</span>
+    <span class="n">tmp_404360</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">byte_404360</span> <span class="o">=</span> <span class="n">tmp_404360</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">byte_404360</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_404320</span><span class="p">:</span>
+	<span class="n">tmp_404320</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">byte_404320</span> <span class="o">=</span> <span class="n">tmp_404320</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">byte_404320</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_404380</span><span class="p">:</span>
+	<span class="n">tmp_404380</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">byte_404380</span> <span class="o">=</span> <span class="n">tmp_404380</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">byte_404380</span><span class="p">)</span>
+
+<span class="c1"># 获取OPCODE</span>
+<span class="n">opcode</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">byte_404380</span><span class="p">)):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">byte_404380</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">byte_404360</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">src</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">opcode</span><span class="p">)</span>
+
+<span class="c1"># 获取KEY</span>
+<span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">byte_404320</span><span class="p">)):</span>
+    <span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte_404320</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">byte_404360</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  
+<span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里看到加密后的数据，很容易联想到是base64处理后的数据，这里key又是64个字符，所以猜测应该是修改了码表的base64，尝试验证一下，先将异或后的key转成字符：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mi">115</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">66</span><span class="p">]</span>
+
+<span class="n">base64_xor_table</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+	<span class="n">base64_xor_table</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以发现该key并未存在字母重复，猜测应该就是base64码表替换：<code>sZGad02wvbf3mtxEq8rDhYK47LueClz1Jig6ypHM+o/W5QjNPFRckUInOTXVAS9B</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">base64</span>
+<span class="n">encode_flag</span> <span class="o">=</span> <span class="s1">&#39;r60ihyZ/m4lseHt+m4t+mIkc&#39;</span>
+
+<span class="n">outtab</span> <span class="o">=</span> <span class="s1">&#39;sZGad02wvbf3mtxEq8rDhYK47LueClz1Jig6ypHM+o/W5QjNPFRckUInOTXVAS9B&#39;</span>
+<span class="n">intab</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;</span>
+
+<span class="n">suf_flag</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">encode_flag</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="n">outtab</span><span class="p">,</span> <span class="n">intab</span><span class="p">)))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>得到：<code>J1aR@j1w@nch1sh3m3</code></p>
+<p>拼接得到最终flag：</p>
+<p><code>flag{ssddddwddddssas-J1aR@j1w@nch1sh3m3}</code></p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203011533851.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="a2956a140145cc321e734ba4cf1aa9d-d940f464"
+	
+	
+></p>
+<h3 id="exp">exp</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">byte_404360</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;3E&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;40&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;4F&#39;</span><span class="p">,</span> <span class="s1">&#39;63&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;60&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">,</span> <span class="s1">&#39;3A&#39;</span><span class="p">,</span> <span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;5D&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="s1">&#39;4C&#39;</span><span class="p">,</span> <span class="s1">&#39;4B&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;5F&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;1A&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;47&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;3B&#39;</span><span class="p">,</span> <span class="s1">&#39;74&#39;</span><span class="p">,</span> <span class="s1">&#39;7D&#39;</span><span class="p">,</span> <span class="s1">&#39;2C&#39;</span><span class="p">,</span> <span class="s1">&#39;2B&#39;</span><span class="p">,</span> <span class="s1">&#39;4A&#39;</span><span class="p">,</span> <span class="s1">&#39;3C&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;70&#39;</span><span class="p">,</span> <span class="s1">&#39;52&#39;</span><span class="p">,</span> <span class="s1">&#39;65&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;59&#39;</span><span class="p">,</span> <span class="s1">&#39;6C&#39;</span><span class="p">,</span> <span class="s1">&#39;77&#39;</span><span class="p">,</span> <span class="s1">&#39;72&#39;</span><span class="p">,</span> <span class="s1">&#39;3D&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">]</span>
+<span class="n">byte_404320</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;4D&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;7A&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;39&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;66&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;60&#39;</span><span class="p">,</span> <span class="s1">&#39;76&#39;</span><span class="p">,</span> <span class="s1">&#39;75&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;58&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;68&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;7F&#39;</span><span class="p">,</span> <span class="s1">&#39;7B&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;4E&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;0F&#39;</span><span class="p">,</span> <span class="s1">&#39;2E&#39;</span><span class="p">,</span> <span class="s1">&#39;3F&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;0D&#39;</span><span class="p">,</span> <span class="s1">&#39;64&#39;</span><span class="p">,</span> <span class="s1">&#39;66&#39;</span><span class="p">,</span> <span class="s1">&#39;61&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;6E&#39;</span><span class="p">,</span> <span class="s1">&#39;69&#39;</span><span class="p">,</span> <span class="s1">&#39;2F&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;6A&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;2A&#39;</span><span class="p">,</span> <span class="s1">&#39;6B&#39;</span><span class="p">,</span> <span class="s1">&#39;73&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;78&#39;</span><span class="p">,</span> <span class="s1">&#39;0B&#39;</span><span class="p">]</span>
+
+<span class="n">tmp_404360</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tmp_404320</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># 将16进制全部转成10进制</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_404360</span><span class="p">:</span>
+    <span class="n">tmp_404360</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">byte_404360</span> <span class="o">=</span> <span class="n">tmp_404360</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_404320</span><span class="p">:</span>
+	<span class="n">tmp_404320</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">byte_404320</span> <span class="o">=</span> <span class="n">tmp_404320</span>
+
+<span class="c1"># 获取KEY</span>
+<span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">byte_404320</span><span class="p">)):</span>
+    <span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte_404320</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">byte_404360</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  
+<span class="c1">#print(key)</span>
+
+<span class="n">outtab</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+    <span class="n">outtab</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1">#print(outtab)</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
+
+<span class="n">pre_flag</span> <span class="o">=</span> <span class="s1">&#39;ssddddwddddssas&#39;</span>
+<span class="n">encode_flag</span> <span class="o">=</span> <span class="s1">&#39;r60ihyZ/m4lseHt+m4t+mIkc&#39;</span>
+
+<span class="n">intab</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#39;</span>
+<span class="n">suf_flag</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">encode_flag</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="n">outtab</span><span class="p">,</span> <span class="n">intab</span><span class="p">)))</span>
+
+<span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;flag{&#39;</span> <span class="o">+</span> <span class="n">pre_flag</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">suf_flag</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+        
+            <a href="/tags/reverse/">Reverse</a>
+        
+            <a href="/tags/python/">Python</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/ctf/rctf2019_donteatme/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DontEatMe 详细分析及解题过程</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/actf2020_splendid_minecraft/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Splendid_Minecraft 解析及脚本</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/swpuctf2019_easyre/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">easyRE 解题脚本及详细分析过程</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tech/vfunc_vtable/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">虚函数以及虚表在IDA中的体现</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2021 - 
+        
+        2022 YuSec2021
+    </section>
+    
+    <section class="powerby">
+        
+            YuSec Github Blog <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.8.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#解题">解题</a></li>
+        <li><a href="#exp">exp</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
