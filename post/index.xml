@@ -6,13 +6,37 @@
     <description>Recent content in Posts on YuSec2021</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Feb 2022 10:16:02 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Mar 2022 11:00:00 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>[RCTF2019]DontEatMe</title>
+      <link>https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/</link>
+      <pubDate>Tue, 01 Mar 2022 11:00:00 +0800</pubDate>
+      
+      <guid>https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/</guid>
+      <description>[RCTF2019]DontEatMe 去反调试 EXE文件，IDA反编译：
+通过srand固定时间戳生成伪随机数，然后在调用rand之前，有一段反调试：
+拿到Ntdll的模块句柄，从句柄中查找ZwSetInformationThread的地址，然后调用这个函数去检查当前线程是否处于Debug模式下：
+1 2 3 4  v3 = GetModuleHandleA(&amp;#34;Ntdll&amp;#34;); ZwSetInformationThread = GetProcAddress(v3, &amp;#34;ZwSetInformationThread&amp;#34;); v5 = GetCurrentThread(); ((void (__stdcall *)(HANDLE, int, _DWORD, _DWORD))ZwSetInformationThread)(v5, 17, 0, 0);   关于ZwSetInformationThread的类型：
+1 2 3 4 5 6  typedef NTSTATUS(NTAPI* pZwSetInformationThread)( IN HANDLE ThreadHandle,	// 线程对象句柄 	IN THREAD_INFO_CLASS ThreadInformaitonClass,	// 线程信息类型 	IN PVOID ThreadInformation,	// 线程信息指针 	IN ULONG ThreadInformationLength	// 线程信息大小 );   线程信息类型为枚举类型：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  typedef enum _THREADINFOCLASS { ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger }THREAD_INFO_CLASS;   该程序中载入的参数就是ThreadHideFromDebugger，此时如果检测到处理Debugger模式就会将该线程强制分离出调试器，该函数与IsDebuggerPresent类似都是用于反调试的</description>
+    </item>
+    
+    <item>
+      <title>[SWPUCTF2019]easyRE</title>
+      <link>https://YuSec2021.github.io/p/ctf/swpu2019_easyre/</link>
+      <pubDate>Tue, 01 Mar 2022 10:28:02 +0800</pubDate>
+      
+      <guid>https://YuSec2021.github.io/p/ctf/swpu2019_easyre/</guid>
+      <description>[SWPU2019]easyRE main函数：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25  int __cdecl main(int argc, const char **argv, const char **envp) { _DWORD v4[28]; // [esp-6Ch] [ebp-F8h] BYREF  _DWORD *v5; // [esp+4h] [ebp-88h]  _DWORD *v6; // [esp+8h] [ebp-84h]  int v7; // [esp+Ch] [ebp-80h]  char v8[108]; // [esp+10h] [ebp-7Ch] BYREF  int v9; // [esp+88h] [ebp-4h]  if ( sub_40EF90() ) return 1; sub_4026C0(0x6Cu); sub_401FE0(v4[27], v5); v9 = 0; v6 = v4; sub_40F360(v8); sub_40F080(v4[0], v4[1]); v5 = v4; sub_40F360(v8); sub_40F150(argc, (int)argv); v7 = 0; v9 = -1; sub_4021C0(v8); return v7; }   首先调用sub_40EF90进行check：</description>
+    </item>
+    
     <item>
       <title>[ACTF新生赛2020]Splendid_MineCraft</title>
-      <link>https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/</link>
+      <link>https://YuSec2021.github.io/p/ctf/actf2020_splendid_minecraft/</link>
       <pubDate>Fri, 25 Feb 2022 10:16:02 +0800</pubDate>
       
-      <guid>https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/</guid>
+      <guid>https://YuSec2021.github.io/p/ctf/actf2020_splendid_minecraft/</guid>
       <description>[ACTF新生赛2020]Splendid_MineCraft 解密字节码 反编译源码：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  int __cdecl main(int argc, const char **argv, const char **envp) { char *v3; // eax  char *v4; // eax  char v6; // [esp+0h] [ebp-68h]  int i; // [esp+14h] [ebp-54h]  char *v8; // [esp+18h] [ebp-50h]  char v9; // [esp+20h] [ebp-48h]  char flag[25]; // [esp+24h] [ebp-44h] BYREF  char v11[25]; // [esp+25h] [ebp-43h] BYREF  char v12; // [esp+3Dh] [ebp-2Bh]  int v13; // [esp+44h] [ebp-24h]  __int16 v14; // [esp+48h] [ebp-20h]  char v15[4]; // [esp+4Ch] [ebp-1Ch]  __int16 v16; // [esp+50h] [ebp-18h]  int v17; // [esp+54h] [ebp-14h] BYREF  __int16 v18; // [esp+58h] [ebp-10h]  int v19; // [esp+5Ch] [ebp-Ch]  __int16 v20; // [esp+60h] [ebp-8h]  sub_401020(&amp;#34;%s\n&amp;#34;, (char)aWelcomeToActfS); sub_401050(&amp;#34;%s&amp;#34;, (char)flag); if ( &amp;amp;flag[strlen(flag) + 1] - v11 == 26 &amp;amp;&amp;amp; !</description>
     </item>

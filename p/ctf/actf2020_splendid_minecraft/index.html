@@ -4,17 +4,19 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='[ACTF新生赛2020]Splendid_MineCraft 解密字节码 反编译源码：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  int __cdecl main(int argc, const char **argv, const char **envp) { char *v3; // eax  char *v4; // eax  char v6; // [esp&#43;0h] [ebp-68h]  int i; // [esp&#43;14h] [ebp-54h]  char *v8; // [esp&#43;18h] [ebp-50h]  char v9; // [esp&#43;20h] [ebp-48h]  char flag[25]; // [esp&#43;24h] [ebp-44h] BYREF  char v11[25]; // [esp&#43;25h] [ebp-43h] BYREF  char v12; // [esp&#43;3Dh] [ebp-2Bh]  int v13; // [esp&#43;44h] [ebp-24h]  __int16 v14; // [esp&#43;48h] [ebp-20h]  char v15[4]; // [esp&#43;4Ch] [ebp-1Ch]  __int16 v16; // [esp&#43;50h] [ebp-18h]  int v17; // [esp&#43;54h] [ebp-14h] BYREF  __int16 v18; // [esp&#43;58h] [ebp-10h]  int v19; // [esp&#43;5Ch] [ebp-Ch]  __int16 v20; // [esp&#43;60h] [ebp-8h]  sub_401020(&amp;#34;%s\n&amp;#34;, (char)aWelcomeToActfS); sub_401050(&amp;#34;%s&amp;#34;, (char)flag); if ( &amp;amp;flag[strlen(flag) &#43; 1] - v11 == 26 &amp;amp;&amp;amp; !'><title>[ACTF新生赛2020]Splendid_MineCraft</title>
 
-<link rel='canonical' href='https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/'>
+<link rel='canonical' href='https://YuSec2021.github.io/p/ctf/actf2020_splendid_minecraft/'>
 
 <link rel="stylesheet" href="/scss/style.min.b949db8bead9abdc40291b93383b8da6abc3aa62e74f5580356c06ddbb792dab.css"><meta property='og:title' content='[ACTF新生赛2020]Splendid_MineCraft'>
 <meta property='og:description' content='[ACTF新生赛2020]Splendid_MineCraft 解密字节码 反编译源码：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  int __cdecl main(int argc, const char **argv, const char **envp) { char *v3; // eax  char *v4; // eax  char v6; // [esp&#43;0h] [ebp-68h]  int i; // [esp&#43;14h] [ebp-54h]  char *v8; // [esp&#43;18h] [ebp-50h]  char v9; // [esp&#43;20h] [ebp-48h]  char flag[25]; // [esp&#43;24h] [ebp-44h] BYREF  char v11[25]; // [esp&#43;25h] [ebp-43h] BYREF  char v12; // [esp&#43;3Dh] [ebp-2Bh]  int v13; // [esp&#43;44h] [ebp-24h]  __int16 v14; // [esp&#43;48h] [ebp-20h]  char v15[4]; // [esp&#43;4Ch] [ebp-1Ch]  __int16 v16; // [esp&#43;50h] [ebp-18h]  int v17; // [esp&#43;54h] [ebp-14h] BYREF  __int16 v18; // [esp&#43;58h] [ebp-10h]  int v19; // [esp&#43;5Ch] [ebp-Ch]  __int16 v20; // [esp&#43;60h] [ebp-8h]  sub_401020(&amp;#34;%s\n&amp;#34;, (char)aWelcomeToActfS); sub_401050(&amp;#34;%s&amp;#34;, (char)flag); if ( &amp;amp;flag[strlen(flag) &#43; 1] - v11 == 26 &amp;amp;&amp;amp; !'>
-<meta property='og:url' content='https://YuSec2021.github.io/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/'>
+<meta property='og:url' content='https://YuSec2021.github.io/p/ctf/actf2020_splendid_minecraft/'>
 <meta property='og:site_name' content='YuSec2021'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2022-02-25T10:16:02&#43;08:00'/><meta property='article:modified_time' content='2022-02-25T10:16:02&#43;08:00'/>
 <meta name="twitter:title" content="[ACTF新生赛2020]Splendid_MineCraft">
 <meta name="twitter:description" content="[ACTF新生赛2020]Splendid_MineCraft 解密字节码 反编译源码：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  int __cdecl main(int argc, const char **argv, const char **envp) { char *v3; // eax  char *v4; // eax  char v6; // [esp&#43;0h] [ebp-68h]  int i; // [esp&#43;14h] [ebp-54h]  char *v8; // [esp&#43;18h] [ebp-50h]  char v9; // [esp&#43;20h] [ebp-48h]  char flag[25]; // [esp&#43;24h] [ebp-44h] BYREF  char v11[25]; // [esp&#43;25h] [ebp-43h] BYREF  char v12; // [esp&#43;3Dh] [ebp-2Bh]  int v13; // [esp&#43;44h] [ebp-24h]  __int16 v14; // [esp&#43;48h] [ebp-20h]  char v15[4]; // [esp&#43;4Ch] [ebp-1Ch]  __int16 v16; // [esp&#43;50h] [ebp-18h]  int v17; // [esp&#43;54h] [ebp-14h] BYREF  __int16 v18; // [esp&#43;58h] [ebp-10h]  int v19; // [esp&#43;5Ch] [ebp-Ch]  __int16 v20; // [esp&#43;60h] [ebp-8h]  sub_401020(&amp;#34;%s\n&amp;#34;, (char)aWelcomeToActfS); sub_401050(&amp;#34;%s&amp;#34;, (char)flag); if ( &amp;amp;flag[strlen(flag) &#43; 1] - v11 == 26 &amp;amp;&amp;amp; !">
+    <link rel="shortcut icon" href="#ZgotmplZ" />
+
     </head>
     <body class="
     article-page has-toc
@@ -76,7 +78,7 @@
     
 
     <h2 class="article-title">
-        <a href="/p/actf%E6%96%B0%E7%94%9F%E8%B5%9B2020splendid_minecraft/">[ACTF新生赛2020]Splendid_MineCraft</a>
+        <a href="/p/ctf/actf2020_splendid_minecraft/">[ACTF新生赛2020]Splendid_MineCraft</a>
     </h2>
 
     
@@ -780,6 +782,30 @@ key = res[0] ^ res[1] ^ res[3] ^ res[0] ^ res[5] ^ res[2] =
                 
                     
 <article class="">
+    <a href="/p/ctf/rctf2019_donteatme/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">[RCTF2019]DontEatMe</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/swpu2019_easyre/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">[SWPUCTF2019]easyRE</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
     <a href="/p/%E8%99%9A%E5%87%BD%E6%95%B0%E4%BB%A5%E5%8F%8A%E8%99%9A%E8%A1%A8%E5%9C%A8ida%E4%B8%AD%E7%9A%84%E4%BD%93%E7%8E%B0/">
         
         
@@ -798,48 +824,6 @@ key = res[0] ^ res[1] ^ res[3] ^ res[0] ^ res[5] ^ res[2] =
      
     
         
-    <div class="disqus-container">
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-
-<style>
-    .disqus-container {
-        background-color: var(--card-background);
-        border-radius: var(--card-border-radius);
-        box-shadow: var(--shadow-l1);
-        padding: var(--card-padding);
-    }
-</style>
-
-<script>
-    window.addEventListener('onColorSchemeChange', (e) => {
-        if (DISQUS) {
-            DISQUS.reset({
-                reload: true
-            });
-        }
-    })
-</script>
-
     
 
     <footer class="site-footer">
