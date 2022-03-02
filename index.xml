@@ -6,7 +6,95 @@
         <description>Recent content on YuSec2021</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://YuSec2021.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Mar 2022 14:39:02 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Windows Kernel基础</title>
+        <link>https://YuSec2021.github.io/p/tech/windows_kernel/</link>
+        <pubDate>Wed, 02 Mar 2022 14:39:02 +0800</pubDate>
+        
+        <guid>https://YuSec2021.github.io/p/tech/windows_kernel/</guid>
+        <description>&lt;h2 id=&#34;windows-内核&#34;&gt;Windows 内核&lt;/h2&gt;
+&lt;h3 id=&#34;0x01-双机调试配置&#34;&gt;0x01 双机调试配置&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;VMware + WinDBG&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;删除Printer，添加串行端口Serial Port：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021435688.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112160817177&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Use named pipe： &lt;code&gt;\\.\pipe\com1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021435125.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112174707061&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;启动Windows XP，找到C:\boot.ini，添加一行：&lt;code&gt;	&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021436874.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112162321874&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;实体机中安装WinDBG preview：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021436555.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112162618854&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;文件-&amp;gt; Attack To Kernel:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021436192.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112174642421&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;成功连接：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021436650.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112174020506&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/YuSec2021/pic/raw/master/img/202203021436017.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20220112174621766&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;未完待续。。。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>DontEatMe 详细分析及解题过程</title>
         <link>https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/</link>
         <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>

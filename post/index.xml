@@ -6,7 +6,23 @@
     <description>Recent content in Posts on YuSec2021</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://YuSec2021.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Mar 2022 14:39:02 +0800</lastBuildDate><atom:link href="https://YuSec2021.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows Kernel基础</title>
+      <link>https://YuSec2021.github.io/p/tech/windows_kernel/</link>
+      <pubDate>Wed, 02 Mar 2022 14:39:02 +0800</pubDate>
+      
+      <guid>https://YuSec2021.github.io/p/tech/windows_kernel/</guid>
+      <description>Windows 内核 0x01 双机调试配置 VMware + WinDBG
+删除Printer，添加串行端口Serial Port：
+Use named pipe： \\.\pipe\com1
+启动Windows XP，找到C:\boot.ini，添加一行：	
+实体机中安装WinDBG preview：
+文件-&amp;gt; Attack To Kernel:
+成功连接：
+未完待续。。。</description>
+    </item>
+    
     <item>
       <title>DontEatMe 详细分析及解题过程</title>
       <link>https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/</link>
