@@ -6,7 +6,18 @@
     <description>Recent content in Reverse on YuSec2021</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://YuSec2021.github.io/categories/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://YuSec2021.github.io/categories/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>babymips</title>
+      <link>https://YuSec2021.github.io/p/ctf/utctf2020_babymips/</link>
+      <pubDate>Thu, 03 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://YuSec2021.github.io/p/ctf/utctf2020_babymips/</guid>
+      <description>[UTCTF2020]babymips 0x00 MIPS的指令：
+IDA可以直接反编译出MIPS的伪代码，所以我们直接看伪代码即可，可以看到是C++语法：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18  int __cdecl main(int argc, const char **argv, const char **envp) { int v3; // $v0  char v5[24]; // [sp+18h] [+18h] BYREF  char v6[24]; // [sp+30h] [+30h] BYREF  char v7[84]; // [sp+48h] [+48h] BYREF  std::__cxx11::basic_string&amp;lt;char,std::char_traits&amp;lt;char&amp;gt;,std::allocator&amp;lt;char&amp;gt;&amp;gt;::basic_string(v5, argv, envp); v3 = std::operator&amp;lt;&amp;lt;&amp;lt;std::char_traits&amp;lt;char&amp;gt;&amp;gt;(&amp;amp;std::cout, &amp;#34;enter the flag&amp;#34;); std::ostream::operator&amp;lt;&amp;lt;(v3, &amp;amp;std::endl&amp;lt;char,std::char_traits&amp;lt;char&amp;gt;&amp;gt;); std::operator&amp;gt;&amp;gt;&amp;lt;char&amp;gt;(&amp;amp;std::cin, v5); memcpy(v7, &amp;amp;unk_4015F4, sizeof(v7)); std::__cxx11::basic_string&amp;lt;char,std::char_traits&amp;lt;char&amp;gt;,std::allocator&amp;lt;char&amp;gt;&amp;gt;::basic_string(v6, v5); sub_401164(v7, v6); std::__cxx11::basic_string&amp;lt;char,std::char_traits&amp;lt;char&amp;gt;,std::allocator&amp;lt;char&amp;gt;&amp;gt;::~basic_string(v6); std::__cxx11::basic_string&amp;lt;char,std::char_traits&amp;lt;char&amp;gt;,std::allocator&amp;lt;char&amp;gt;&amp;gt;::~basic_string(v5); return 0; }   关键函数：sub_401164传入两个参数，一个是v7，将unk_4015F4复制，一个是v6，就是输入的flag</description>
+    </item>
+    
     <item>
       <title>DontEatMe 详细分析及解题过程</title>
       <link>https://YuSec2021.github.io/p/ctf/rctf2019_donteatme/</link>

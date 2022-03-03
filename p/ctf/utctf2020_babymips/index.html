@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='UTCTF2020 babymips'><title>babymips</title>
+
+<link rel='canonical' href='https://YuSec2021.github.io/p/ctf/utctf2020_babymips/'>
+
+<link rel="stylesheet" href="/scss/style.min.b949db8bead9abdc40291b93383b8da6abc3aa62e74f5580356c06ddbb792dab.css"><meta property='og:title' content='babymips'>
+<meta property='og:description' content='UTCTF2020 babymips'>
+<meta property='og:url' content='https://YuSec2021.github.io/p/ctf/utctf2020_babymips/'>
+<meta property='og:site_name' content='YuSec2021'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2022-03-03T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-03-03T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="babymips">
+<meta name="twitter:description" content="UTCTF2020 babymips">
+    <link rel="shortcut icon" href="#ZgotmplZ" />
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/reverse/" >
+                Reverse
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/ctf/utctf2020_babymips/">babymips</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        UTCTF2020 babymips
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 03, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="utctf2020babymips">[UTCTF2020]babymips</h2>
+<h3 id="0x00">0x00</h3>
+<p>MIPS的指令：</p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623152.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118095524636"
+	
+	
+></p>
+<p>IDA可以直接反编译出MIPS的伪代码，所以我们直接看伪代码即可，可以看到是C++语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="kr">__cdecl</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">**</span><span class="n">envp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">v3</span><span class="p">;</span> <span class="c1">// $v0
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">v5</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span> <span class="c1">// [sp+18h] [+18h] BYREF
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">v6</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span> <span class="c1">// [sp+30h] [+30h] BYREF
+</span><span class="c1"></span>  <span class="kt">char</span> <span class="n">v7</span><span class="p">[</span><span class="mi">84</span><span class="p">];</span> <span class="c1">// [sp+48h] [+48h] BYREF
+</span><span class="c1"></span>
+  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v5</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">envp</span><span class="p">);</span>
+  <span class="n">v3</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&#34;enter the flag&#34;</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">v3</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="k">operator</span><span class="o">&gt;&gt;&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">,</span> <span class="n">v5</span><span class="p">);</span>
+  <span class="n">memcpy</span><span class="p">(</span><span class="n">v7</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">unk_4015F4</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">v7</span><span class="p">));</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v6</span><span class="p">,</span> <span class="n">v5</span><span class="p">);</span>
+  <span class="n">sub_401164</span><span class="p">(</span><span class="n">v7</span><span class="p">,</span> <span class="n">v6</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::~</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v6</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::~</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v5</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>关键函数：sub_401164传入两个参数，一个是v7，将unk_4015F4复制，一个是v6，就是输入的flag</p>
+<p>导出unk_4015F4:</p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623801.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118102349919"
+	
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">unsigned char ida_chars[] =
+{
+  0x62, 0x6C, 0x7F, 0x76, 0x7A, 0x7B, 0x66, 0x73, 0x76, 0x50, 
+  0x52, 0x7D, 0x40, 0x54, 0x55, 0x79, 0x40, 0x49, 0x47, 0x4D, 
+  0x74, 0x19, 0x7B, 0x6A, 0x42, 0x0A, 0x4F, 0x52, 0x7D, 0x69, 
+  0x4F, 0x53, 0x0C, 0x64, 0x10, 0x0F, 0x1E, 0x4A, 0x67, 0x03, 
+  0x7C, 0x67, 0x02, 0x6A, 0x31, 0x67, 0x61, 0x37, 0x7A, 0x62, 
+  0x2C, 0x2C, 0x0F, 0x6E, 0x17, 0x00, 0x16, 0x0F, 0x16, 0x0A, 
+  0x6D, 0x62, 0x73, 0x25, 0x39, 0x76, 0x2E, 0x1C, 0x63, 0x78, 
+  0x2B, 0x74, 0x32, 0x16, 0x20, 0x22, 0x44, 0x19, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00
+};
+</code></pre></td></tr></table>
+</div>
+</div><p>sub_401164，整体逻辑很简单，显示判断a2的size是否为0x4E，是则进入for循环，对a2挨个字符进行异或与a1相比，最终都相等则输出correct：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="kr">__fastcall</span> <span class="nf">sub_401164</span><span class="p">(</span><span class="kt">int</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a2</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">v2</span><span class="p">;</span> <span class="c1">// $v0
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// $v0
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">v4</span><span class="p">;</span> <span class="c1">// $v0
+</span><span class="c1"></span>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [sp+1Ch] [+1Ch]
+</span><span class="c1"></span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">size</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x4E</span> <span class="p">)</span>
+  <span class="p">{</span>
+<span class="nl">LABEL_2</span><span class="p">:</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&#34;incorrect&#34;</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">size</span><span class="p">(</span><span class="n">a2</span><span class="p">);</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="k">operator</span><span class="p">[](</span><span class="n">a2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">23</span><span class="p">))</span> <span class="o">!=</span> <span class="o">*</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)(</span><span class="n">a1</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">goto</span> <span class="n">LABEL_2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">v4</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&#34;correct!&#34;</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">::</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">v4</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>根据以上即可写出exp：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">res</span><span class="p">[</span><span class="mi">84</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+	<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">ida_chars</span><span class="p">[]</span> <span class="o">=</span>
+	<span class="p">{</span>
+	  <span class="mh">0x62</span><span class="p">,</span> <span class="mh">0x6C</span><span class="p">,</span> <span class="mh">0x7F</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">,</span> <span class="mh">0x7A</span><span class="p">,</span> <span class="mh">0x7B</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span>
+	  <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x7D</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x79</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x49</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span> <span class="mh">0x4D</span><span class="p">,</span>
+	  <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x19</span><span class="p">,</span> <span class="mh">0x7B</span><span class="p">,</span> <span class="mh">0x6A</span><span class="p">,</span> <span class="mh">0x42</span><span class="p">,</span> <span class="mh">0x0A</span><span class="p">,</span> <span class="mh">0x4F</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x7D</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span>
+	  <span class="mh">0x4F</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0x0C</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">,</span> <span class="mh">0x0F</span><span class="p">,</span> <span class="mh">0x1E</span><span class="p">,</span> <span class="mh">0x4A</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span>
+	  <span class="mh">0x7C</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x6A</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span> <span class="mh">0x37</span><span class="p">,</span> <span class="mh">0x7A</span><span class="p">,</span> <span class="mh">0x62</span><span class="p">,</span>
+	  <span class="mh">0x2C</span><span class="p">,</span> <span class="mh">0x2C</span><span class="p">,</span> <span class="mh">0x0F</span><span class="p">,</span> <span class="mh">0x6E</span><span class="p">,</span> <span class="mh">0x17</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0x0F</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0x0A</span><span class="p">,</span>
+	  <span class="mh">0x6D</span><span class="p">,</span> <span class="mh">0x62</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x25</span><span class="p">,</span> <span class="mh">0x39</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">,</span> <span class="mh">0x2E</span><span class="p">,</span> <span class="mh">0x1C</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span>
+	  <span class="mh">0x2B</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x32</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x19</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>
+	  <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x4E</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>
+	  <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span>
+	<span class="p">};</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mh">0x4E</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ida_chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">23</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">res</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>得到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">utflag{mips_cpp_gang_5VDm:~`N]ze;\)5%vZ=C&#39;C(r#$q=*efD&#34;ZNY_GX&gt;6&amp;sn.wF8$v*mvA@&#39;}
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623541.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118105019420"
+	
+	
+></p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623053.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118105150796"
+	
+	
+></p>
+<p>到这里解题就结束了，接下来就是关于MIPS指令的学习</p>
+<h3 id="0x01-mips指令">0x01 MIPS指令</h3>
+<p>首先需要知道MIPS和x86指令最本质的区别就是，MIPS属于RISC（精简指令集），x86属于CISC（复杂指令集）。</p>
+<p>精简指令集与复杂指令集的区别就是指令的数量，精简指令集是以最大化程度减少指令的数量，那么相应的，某些功能如果通过精简指令集进行表达，则需要多条指令结合才能达到目的。而复杂指令集相反，增加指令的类型和数量，减少某些功能执行指令的数量。可以说前者是牺牲时间换空间，后者则是牺牲空间换时间，在某些简单操作上，精简指令集是比较占优势的，而对于复杂操作，复杂指令集的效率往往会更高，目前我们常用的Linux、Windows系统都是属于x86或者arm架构的复杂指令集。</p>
+<p>MIPS，全称为Microcompute without InterLocked Pipeline Stages，中文翻译为无互锁流水级的微处理器</p>
+<p>MIPS包含32个通用寄存器（$0-$31）:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>助记符</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>zero</td>
+<td>不管传入什么数据，该寄存器的值永远都为0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>at</td>
+<td>用作汇编器的暂时变量</td>
+</tr>
+<tr>
+<td>2-3</td>
+<td>v0, v1</td>
+<td>子函数调用返回结果</td>
+</tr>
+<tr>
+<td>4-7</td>
+<td>a0-a3</td>
+<td>子函数调用的参数</td>
+</tr>
+<tr>
+<td>8-15</td>
+<td>t0-t7</td>
+<td>暂时变量，子函数调用时不需要保存与恢复</td>
+</tr>
+<tr>
+<td>24-25</td>
+<td>t8-t9</td>
+<td>暂时变量，子函数调用时不需要保存与恢复</td>
+</tr>
+<tr>
+<td>16-23</td>
+<td>s0-s7</td>
+<td>子函数寄存器变量，在返回之前子函数必须保存和恢复使用过的变量，</td>
+</tr>
+<tr>
+<td>26-27</td>
+<td>k0, k1</td>
+<td>通常被中断或异常处理程序使用作为保存一些系统参数</td>
+</tr>
+<tr>
+<td>28</td>
+<td>gp</td>
+<td>全局指针，一些运行系统维护这个指针来更方便的存取static和extern变量</td>
+</tr>
+<tr>
+<td>29</td>
+<td>sp</td>
+<td>堆栈指针</td>
+</tr>
+<tr>
+<td>30</td>
+<td>s8/fp</td>
+<td>第9个寄存器变量/框架指针</td>
+</tr>
+<tr>
+<td>31</td>
+<td>ra</td>
+<td>子函数的返回地址</td>
+</tr>
+</tbody>
+</table></div>
+<p>MIPS三种指令格式：</p>
+<ul>
+<li>R格式 Register Format 所有其他</li>
+<li>I格式 Immediate Format 用于有立即数的指令，lw,sw,</li>
+<li>J格式 Jump Format 无条件跳转j，并连接jal</li>
+</ul>
+<p>R指令</p>
+<h3 id="0x02-实例">0x02 实例</h3>
+<p>根据功能可以分为五类：</p>
+<p>1.算数运算：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">move $t5, $t1       // $t5 = $t1;
+add $t0, $t1,       // $t2 $t0 = $t1 + $t2; 带符号数相加
+sub $t0, $t1,       // $t2 $t0 = $t1 - $t2; 带符号数相减
+addi $t0, $t1, 5    // $t0 = $t1 + 5;
+addu $t0, $t1, $t2  // $t0 = $t1 + $t2; 无符号数相加
+subu $t0, $t1, $t2  // $t0 = $t1 - $t2; 无符号数相减
+mult $t3, $t4       // $t3 * $t4, 把64-Bits 的积，存储到Lo，Hi中。即： (Hi, Lo) = $t3 * $t4;
+div $t5, $t6        // Lo = $t5 / $t6 (Lo为商的整数部分);　Hi = $t5 mod $t6 (Hi为余数)
+mfhi $t0            // $t0 = Hi
+mflo $t1            // $t1 = Lo
+</code></pre></td></tr></table>
+</div>
+</div><p>2.分支跳转：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">b target 无条件的分支跳转，将跳转到target 标签处
+beq $t0, $t1, target       // 如果 $t0 == $t1, 则跳转到target 标签处
+blt $t0, $t1, target       // 如果 $t0 &lt; $t1,  则跳转到target 标签处
+ble $t0, $t1, target       // 如果 $t0 &lt;=$t1,  则跳转到target 标签处
+bgt $t0, $t1, target       // 如果 $t0 &gt; $t1,  则跳转到target 标签处
+bge $t0, $t1, target       // 如果 $t0 &gt;= $t1, 则跳转到target 标签处
+bne $t0, $t1, target       // 如果 $t0 != $t1, 则跳转到target 标签处
+</code></pre></td></tr></table>
+</div>
+</div><p>3.跳转：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">j target          // 无条件的跳转, 将跳转到target 标签处
+jr $t3            // 跳转到t3寄存器所指向的地址处（Jump Register）
+</code></pre></td></tr></table>
+</div>
+</div><p>4.数据加载/存储</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">la $t0, val_1 复制val_1表示的地址到t0寄存器中   　　注： val_1是个Label
+lw $t2, ($t0) t0寄存器中的值作为地址，把这个地址起始的Word 复制到t2 中
+lw $t2, 4($t0) t0寄存器中的值作为地址， 把这个地址再加上偏移量4后 所起始的Word 复制到t2 中
+sw $t2, ($t0) 把t2寄存器中值（1 Word），存储到t0的值所指向的RAM中
+sw $t2, -12($t0) 把t2寄存器中值（1 Word），存储到t0的值再减去偏移量12, 所指向的RAM 中
+</code></pre></td></tr></table>
+</div>
+</div><p>5.子函数调用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">jal sub_routine_label 执行步骤：
+　　a. 复制当前的PC（Program Counter）到$ra寄存器中。 因为当前的PC 值就是子函数执行完毕后的返回
+       地址。
+　　b. 程序跳转到子程序标签sub_routine_label处
+</code></pre></td></tr></table>
+</div>
+</div><p>根据以上实例大概可以了解到，对于存在立即数的指令，指令的助记符必须加上i，例如<code>addi $t0 $t1 5</code>、<code>subi $t0 $t1 5</code>，对于无符号数操作，与x86中类似，在助记符后加<code>u</code>即可，例如<code>addu $t0 $t1</code>，如果同时存在，则加上<code>iu</code>，例如 <code>subiu $t0 $t1 5</code></p>
+<h3 id="0x03-实例练习">0x03 实例练习</h3>
+<p>在该题中，首先根据graph流程图，找到循环的位置：</p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623161.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118145824586"
+	
+	
+></p>
+<p>在进循环前执行：<code>sw $zero, 0x28+var_C($fp)</code>，在反编译中，进循环前第一步就是<code>int i = 0</code>，由于<code>$zero</code>寄存器中的值永远为0，所以可以知道该指令就是对内存的赋值，对于<code>0x28+var_c($fp)</code>中的值进行赋值，那么该变量就是此时的<code>i</code>，可以发现<code>sw</code>就是从左往右赋值。在每次循环结束时，<code>i++</code>，根据关键字寻找可以发现，跳转前执行以下指令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">lw      $v0, 0x28+var_C($fp)
+addiu   $v0, 1
+sw      $v0, 0x28+var_C($fp)
+b       loc_4011FC
+</code></pre></td></tr></table>
+</div>
+</div><p>与<code>sw</code>相反的就是<code>lw</code>，从右往左赋值，将临时变量i存入寄存器<code>v0</code>中，然后将<code>v0</code>的值加<code>1</code>，通过<code>sw</code>将值存回<code>i</code>中。</p>
+<p><strong>对于<code>lw</code>称为数据加载，将数据从内存加载到寄存器中，而<code>sw</code>称为数据存储，将数据从寄存器存储到内存中</strong>，然后调用分支指令<code>b</code>跳转到判断的位置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">lw      $a0, 0x28+arg_4($fp)
+la      $v0, _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4sizeEv  # std::__cxx11::basic_string&lt;char,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;::size(void)
+move    $t9, $v0
+jalr    $t9 ; std::__cxx11::basic_string&lt;char,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;::size(void)  # std::__cxx11::basic_string&lt;char,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;::size(void)
+nop
+lw      $gp, 0x28+var_18($fp)
+move    $v1, $v0
+lw      $v0, 0x28+var_C($fp)
+sltu    $v0, $v1
+andi    $v0, 0xFF
+beqz    $v0, loc_4012E0
+</code></pre></td></tr></table>
+</div>
+</div><p>首先加载地址到<code>a0</code>寄存器中，通过之前的了解我们知道<code>a0-a3</code>都是子函数的参数，所以继续往下，<code>la</code>应该就是将子函数地址给到<code>v0</code>寄存器，然后赋值到<code>t9</code>寄存器中，通过<code>jalr</code>指令进行子函数调用，此时<code>a0</code>作为参数，其实就是输入的<code>flag</code>的地址，调用完之后，将<code>strlen</code>的结果加载到<code>v0</code>寄存器中，往下就是将<code>v0</code>的结果复制到<code>v1</code>，然后取<code>i</code>加载到<code>v0</code>，执行<code>sltu</code>对<code>v0</code>和<code>v1</code>进行比较，根据前面的学习，<code>sltu</code>无符号数操作，所以此时<code>sltu $v0, $v1</code>的含义是，<code>if $v0 &lt; $v1, $v0 = 1, else $v0 = 0</code>，往下的<code>beqz</code>就是如果<code>v0=0</code>则跳转到<code>loc_4012E0</code>的位置继续执行，该位置就是提示成功的位置了：</p>
+<p><img src="https://gitee.com/YuSec2021/pic/raw/master/img/202203031623635.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="image-20220118155755028"
+	
+	
+></p>
+<p>往下便如法炮制了，不再做深入了解，通过本题大概学习了MIPS的指令格式以及其与x86架构的一些区别，后续如果遇到其他相关题目，再做深入的学习</p>
+<h4 id="参考文献">参考文献</h4>
+<p>[1]https://blog.csdn.net/qq_41191281/article/details/85933985</p>
+<p>[2]https://blog.csdn.net/ben_chong/article/details/51794093</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/ctf/rctf2019_donteatme/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DontEatMe 详细分析及解题过程</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/qiangwang_re/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SimpleRE 分析及解题脚本</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/actf2020_splendid_minecraft/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Splendid_Minecraft 解析及脚本</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/ctf/swpuctf2019_easyre/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">easyRE 解题脚本及详细分析过程</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/tech/vfunc_vtable/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">虚函数以及虚表在IDA中的体现</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2021 - 
+        
+        2022 YuSec2021
+    </section>
+    
+    <section class="powerby">
+        
+            YuSec Github Blog <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.8.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#utctf2020babymips">[UTCTF2020]babymips</a>
+      <ol>
+        <li><a href="#0x00">0x00</a></li>
+        <li><a href="#0x01-mips指令">0x01 MIPS指令</a></li>
+        <li><a href="#0x02-实例">0x02 实例</a></li>
+        <li><a href="#0x03-实例练习">0x03 实例练习</a>
+          <ol>
+            <li><a href="#参考文献">参考文献</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
